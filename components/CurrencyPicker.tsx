@@ -127,7 +127,7 @@ export function CurrencyPicker({
     <Modal
       visible={visible}
       animationType="slide"
-      presentationStyle="fullScreen"
+      presentationStyle="formSheet"
       onRequestClose={onClose}
     >
       {content}

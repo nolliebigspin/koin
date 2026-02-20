@@ -1,20 +1,20 @@
-import { useState, useMemo, useCallback } from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useHomeCurrency } from '@/hooks/useHomeCurrency';
-import { useTravelCurrency } from '@/hooks/useTravelCurrency';
-import { useDecimalSeparator } from '@/hooks/useDecimalSeparator';
-import { useRates } from '@/hooks/useRates';
-import { getCurrency } from '@/constants/currencies';
-import { CurrencyPicker } from '@/components/CurrencyPicker';
-import { NumericDisplay } from '@/components/NumericDisplay';
-import { NumPad } from '@/components/NumPad';
-import { SettingsModal } from '@/components/SettingsModal';
-import type { Currency } from '@/constants/currencies';
+import { useCallback, useMemo, useState } from "react";
+import { Pressable, Text, View } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { CurrencyPicker } from "@/components/CurrencyPicker";
+import { NumericDisplay } from "@/components/NumericDisplay";
+import { NumPad } from "@/components/NumPad";
+import { SettingsModal } from "@/components/SettingsModal";
+import type { Currency } from "@/constants/currencies";
+import { getCurrency } from "@/constants/currencies";
+import { useDecimalSeparator } from "@/hooks/useDecimalSeparator";
+import { useHomeCurrency } from "@/hooks/useHomeCurrency";
+import { useRates } from "@/hooks/useRates";
+import { useTravelCurrency } from "@/hooks/useTravelCurrency";
 
 function formatInputDisplay(raw: string, decimalSep: string, thousandsSep: string): string {
-  if (!raw) return '0';
-  const [intPart, decPart] = raw.split('.');
+  if (!raw) return "0";
+  const [intPart, decPart] = raw.split(".");
   const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
   return decPart !== undefined ? `${formatted}${decimalSep}${decPart}` : formatted;
 }
@@ -25,24 +25,24 @@ export default function TravelScreen() {
   const { decimal, thousands } = useDecimalSeparator();
   const { rates, isLoading, isStale, refetch, lastUpdated } = useRates(homeCurrency);
 
-  const activeTravelCurrency = travelCurrency ?? 'EUR';
+  const activeTravelCurrency = travelCurrency ?? "EUR";
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [showHomePicker, setShowHomePicker] = useState(false);
   const [showTravelPicker, setShowTravelPicker] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
   const handleNumPadPress = useCallback((key: string) => {
     setInput((prev) => {
-      if (key === '⌫') {
+      if (key === "⌫") {
         return prev.slice(0, -1);
       }
-      if (key === '.') {
-        if (prev.includes('.')) return prev;
-        if (prev === '') return '0.';
+      if (key === ".") {
+        if (prev.includes(".")) return prev;
+        if (prev === "") return "0.";
       }
       if (prev.length >= 12) return prev;
-      const decimalIndex = prev.indexOf('.');
+      const decimalIndex = prev.indexOf(".");
       if (decimalIndex !== -1 && prev.length - decimalIndex > 2) return prev;
       return prev + key;
     });
@@ -54,7 +54,7 @@ export default function TravelScreen() {
     }
 
     const foreignAmount = parseFloat(input);
-    if (isNaN(foreignAmount) || foreignAmount === 0) {
+    if (Number.isNaN(foreignAmount) || foreignAmount === 0) {
       return { convertedAmount: null, travelRate: null };
     }
 
@@ -67,20 +67,26 @@ export default function TravelScreen() {
     return { convertedAmount: homeAmount, travelRate: rate };
   }, [rates, input, activeTravelCurrency]);
 
-  const homeInfo = getCurrency(homeCurrency ?? 'USD');
+  const homeInfo = getCurrency(homeCurrency ?? "USD");
   const travelInfo = getCurrency(activeTravelCurrency);
 
-  const handleSelectHome = useCallback((currency: Currency) => {
-    setHomeCurrency(currency.code);
-    setShowHomePicker(false);
-    setInput('');
-  }, [setHomeCurrency]);
+  const handleSelectHome = useCallback(
+    (currency: Currency) => {
+      setHomeCurrency(currency.code);
+      setShowHomePicker(false);
+      setInput("");
+    },
+    [setHomeCurrency]
+  );
 
-  const handleSelectTravel = useCallback((currency: Currency) => {
-    setTravelCurrency(currency.code);
-    setShowTravelPicker(false);
-    setInput('');
-  }, [setTravelCurrency]);
+  const handleSelectTravel = useCallback(
+    (currency: Currency) => {
+      setTravelCurrency(currency.code);
+      setShowTravelPicker(false);
+      setInput("");
+    },
+    [setTravelCurrency]
+  );
 
   return (
     <View style={styles.container}>
@@ -126,7 +132,7 @@ export default function TravelScreen() {
       {/* Converted result */}
       <NumericDisplay
         amount={convertedAmount}
-        homeCurrency={homeCurrency ?? 'USD'}
+        homeCurrency={homeCurrency ?? "USD"}
         travelCurrency={activeTravelCurrency}
         rate={travelRate}
         isStale={isStale}
@@ -141,9 +147,7 @@ export default function TravelScreen() {
         onPress={() => refetch()}
         accessibilityLabel="Refresh exchange rates"
       >
-        <Text style={styles.refreshText}>
-          {isLoading ? 'Updating...' : '↻ Refresh rates'}
-        </Text>
+        <Text style={styles.refreshText}>{isLoading ? "Updating..." : "↻ Refresh rates"}</Text>
       </Pressable>
 
       {/* NumPad pinned to bottom */}
@@ -164,10 +168,7 @@ export default function TravelScreen() {
         onClose={() => setShowTravelPicker(false)}
         selected={activeTravelCurrency}
       />
-      <SettingsModal
-        visible={showSettings}
-        onClose={() => setShowSettings(false)}
-      />
+      <SettingsModal visible={showSettings} onClose={() => setShowSettings(false)} />
     </View>
   );
 }
@@ -179,14 +180,14 @@ const styles = StyleSheet.create((theme, rt) => ({
     paddingTop: rt.insets.top + theme.spacing.md,
   },
   topBar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: theme.spacing.md,
   },
   homeCurrencyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,
@@ -201,7 +202,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     fontSize: 11,
   },
   settingsButton: {
-    position: 'absolute',
+    position: "absolute",
     right: theme.spacing.md,
     padding: theme.spacing.sm,
   },
@@ -210,7 +211,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     color: theme.colors.textTertiary,
   },
   travelCurrencyButton: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: theme.spacing.lg,
   },
   travelFlag: {
@@ -229,11 +230,11 @@ const styles = StyleSheet.create((theme, rt) => ({
   inputDisplay: {
     color: theme.colors.text,
     ...theme.typography.codeMedium,
-    textAlign: 'center',
+    textAlign: "center",
     paddingVertical: theme.spacing.sm,
   },
   refreshButton: {
-    alignSelf: 'center',
+    alignSelf: "center",
     paddingVertical: theme.spacing.xs,
     paddingHorizontal: theme.spacing.md,
   },
@@ -242,7 +243,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     ...theme.typography.caption,
   },
   numpadContainer: {
-    marginTop: 'auto',
+    marginTop: "auto",
     paddingTop: theme.spacing.sm,
     paddingBottom: rt.insets.bottom + theme.spacing.md,
   },

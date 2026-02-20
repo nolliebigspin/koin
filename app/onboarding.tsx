@@ -1,16 +1,16 @@
-import { View, Text } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { router } from 'expo-router';
-import { CurrencyPicker } from '@/components/CurrencyPicker';
-import { useHomeCurrency } from '@/hooks/useHomeCurrency';
-import type { Currency } from '@/constants/currencies';
+import { router } from "expo-router";
+import { Text, View } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { CurrencyPicker } from "@/components/CurrencyPicker";
+import type { Currency } from "@/constants/currencies";
+import { useHomeCurrency } from "@/hooks/useHomeCurrency";
 
 export default function OnboardingScreen() {
   const { setHomeCurrency } = useHomeCurrency();
 
   const handleSelect = (currency: Currency) => {
     setHomeCurrency(currency.code);
-    router.replace('/travel');
+    router.replace("/travel");
   };
 
   return (
@@ -20,12 +20,7 @@ export default function OnboardingScreen() {
         <Text style={styles.subtitle}>This is the currency you think in.</Text>
       </View>
 
-      <CurrencyPicker
-        visible={true}
-        onSelect={handleSelect}
-        onClose={() => {}}
-        mode="inline"
-      />
+      <CurrencyPicker visible={true} onSelect={handleSelect} onClose={() => {}} mode="inline" />
     </View>
   );
 }

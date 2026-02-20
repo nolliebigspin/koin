@@ -1,1 +1,8 @@
-{ "recommendations": ["expo.vscode-expo-tools"] }
+{
+  "recommendations": [
+    "fill-labs.dependi",
+    "gruntfuggly.todo-tree",
+    "biomejs.biome",
+    "expo.vscode-expo-tools"
+  ]
+}

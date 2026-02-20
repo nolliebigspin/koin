@@ -1,6 +1,6 @@
-import { View, Text, Pressable, Modal } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import { useDecimalSeparator, type DecimalSeparator } from '@/hooks/useDecimalSeparator';
+import { Modal, Pressable, Text, View } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { type DecimalSeparator, useDecimalSeparator } from "@/hooks/useDecimalSeparator";
 
 interface SettingsModalProps {
   visible: boolean;
@@ -11,8 +11,8 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
   const { decimal, setDecimal } = useDecimalSeparator();
 
   const options: { value: DecimalSeparator; label: string; example: string }[] = [
-    { value: ',', label: 'Comma (,)', example: '1.000,50' },
-    { value: '.', label: 'Period (.)', example: '1,000.50' },
+    { value: ",", label: "Comma (,)", example: "1.000,50" },
+    { value: ".", label: "Period (.)", example: "1,000.50" },
   ];
 
   return (
@@ -71,9 +71,9 @@ const styles = StyleSheet.create((theme, rt) => ({
     paddingHorizontal: theme.spacing.md,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingBottom: theme.spacing.xl,
   },
   title: {
@@ -83,19 +83,19 @@ const styles = StyleSheet.create((theme, rt) => ({
   closeButton: {
     color: theme.colors.accent,
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sectionLabel: {
     color: theme.colors.textSecondary,
     ...theme.typography.caption,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: theme.spacing.sm,
   },
   option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radii.md,
     paddingVertical: theme.spacing.md,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create((theme, rt) => ({
   optionLabel: {
     color: theme.colors.text,
     ...theme.typography.body,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   optionExample: {
     color: theme.colors.textSecondary,
@@ -126,8 +126,8 @@ const styles = StyleSheet.create((theme, rt) => ({
     borderRadius: 12,
     borderWidth: 2,
     borderColor: theme.colors.textTertiary,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginLeft: theme.spacing.md,
   },
   radioActive: {

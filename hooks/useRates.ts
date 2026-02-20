@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
-import { storage, StorageKeys } from '@/lib/storage';
+import { useQuery } from "@tanstack/react-query";
+import { StorageKeys, storage } from "@/lib/storage";
 
 interface RatesResponse {
   base: string;
@@ -29,9 +29,7 @@ function setCachedRates(data: CachedRates): void {
 }
 
 async function fetchRates(baseCurrency: string): Promise<CachedRates> {
-  const response = await fetch(
-    `https://api.exchangerate-api.com/v4/latest/${baseCurrency}`,
-  );
+  const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch rates: ${response.status}`);
@@ -53,22 +51,22 @@ export function useRates(baseCurrency: string | undefined) {
   const cached = getCachedRates();
 
   const query = useQuery({
-    queryKey: ['rates', baseCurrency],
-    queryFn: () => fetchRates(baseCurrency!),
+    queryKey: ["rates", baseCurrency],
+    queryFn: () => fetchRates(baseCurrency as string),
     enabled: !!baseCurrency,
     staleTime: 5 * 60 * 1000,
     gcTime: 24 * 60 * 60 * 1000,
     retry: 2,
-    placeholderData: (cached?.base === baseCurrency ? cached : undefined) as CachedRates | undefined,
+    placeholderData: (cached?.base === baseCurrency ? cached : undefined) as
+      | CachedRates
+      | undefined,
   });
 
   const rates = query.data?.rates ?? cached?.rates ?? null;
   const lastUpdated = query.data?.lastUpdated ?? cached?.lastUpdated ?? null;
 
   const isStale =
-    query.isError ||
-    (!query.data && !!cached) ||
-    (!!cached && cached.base !== baseCurrency);
+    query.isError || (!query.data && !!cached) || (!!cached && cached.base !== baseCurrency);
 
   return {
     rates,

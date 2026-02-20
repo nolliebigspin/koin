@@ -1,24 +1,24 @@
-import { useState, useMemo, useCallback } from 'react';
+import * as Haptics from "expo-haptics";
+import { useCallback, useMemo, useState } from "react";
 import {
-  View,
+  FlatList,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
   Text,
   TextInput,
-  FlatList,
-  Pressable,
-  Modal,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
-import * as Haptics from 'expo-haptics';
-import { currencies, type Currency } from '@/constants/currencies';
+  View,
+} from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { type Currency, currencies } from "@/constants/currencies";
 
 interface CurrencyPickerProps {
   visible: boolean;
   onSelect: (currency: Currency) => void;
   onClose: () => void;
   selected?: string;
-  mode?: 'modal' | 'inline';
+  mode?: "modal" | "inline";
 }
 
 export function CurrencyPicker({
@@ -26,9 +26,9 @@ export function CurrencyPicker({
   onSelect,
   onClose,
   selected,
-  mode = 'modal',
+  mode = "modal",
 }: CurrencyPickerProps) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
     if (!search.trim()) return currencies;
@@ -37,19 +37,19 @@ export function CurrencyPicker({
       (c) =>
         c.code.toLowerCase().includes(q) ||
         c.name.toLowerCase().includes(q) ||
-        c.country.toLowerCase().includes(q),
+        c.country.toLowerCase().includes(q)
     );
   }, [search]);
 
   const handleSelect = useCallback(
     (currency: Currency) => {
-      if (Platform.OS === 'ios') {
+      if (Platform.OS === "ios") {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       }
       onSelect(currency);
-      setSearch('');
+      setSearch("");
     },
-    [onSelect],
+    [onSelect]
   );
 
   const renderItem = useCallback(
@@ -72,7 +72,7 @@ export function CurrencyPicker({
         </Pressable>
       );
     },
-    [selected, handleSelect],
+    [selected, handleSelect]
   );
 
   const keyExtractor = useCallback((item: Currency) => item.code, []);
@@ -80,9 +80,9 @@ export function CurrencyPicker({
   const content = (
     <KeyboardAvoidingView
       style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      {mode === 'modal' && (
+      {mode === "modal" && (
         <View style={styles.header}>
           <Pressable
             onPress={onClose}
@@ -119,7 +119,7 @@ export function CurrencyPicker({
     </KeyboardAvoidingView>
   );
 
-  if (mode === 'inline') {
+  if (mode === "inline") {
     return content;
   }
 
@@ -141,8 +141,8 @@ const styles = StyleSheet.create((theme, rt) => ({
     backgroundColor: theme.colors.background,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     paddingHorizontal: theme.spacing.md,
     paddingTop: rt.insets.top + theme.spacing.sm,
     paddingBottom: theme.spacing.sm,
@@ -150,7 +150,7 @@ const styles = StyleSheet.create((theme, rt) => ({
   closeButton: {
     color: theme.colors.accent,
     fontSize: 17,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   searchContainer: {
     paddingHorizontal: theme.spacing.md,
@@ -168,8 +168,8 @@ const styles = StyleSheet.create((theme, rt) => ({
     paddingBottom: theme.spacing.xxl,
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: theme.spacing.sm + 4,
     paddingHorizontal: theme.spacing.md,
     minHeight: 56,

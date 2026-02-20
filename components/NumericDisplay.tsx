@@ -1,6 +1,6 @@
-import { getCurrency } from '@/constants/currencies';
-import { Text, View } from 'react-native';
-import { StyleSheet } from 'react-native-unistyles';
+import { Text, View } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
+import { getCurrency } from "@/constants/currencies";
 
 interface NumericDisplayProps {
   amount: number | null;
@@ -9,16 +9,12 @@ interface NumericDisplayProps {
   rate: number | null;
   isStale: boolean;
   lastUpdated: number | null;
-  decimalSep?: ',' | '.';
-  thousandsSep?: '.' | ',';
+  decimalSep?: "," | ".";
+  thousandsSep?: "." | ",";
 }
 
-function formatAmount(
-  amount: number,
-  decimalSep: string,
-  thousandsSep: string,
-): string {
-  const [intPart, decPart] = amount.toFixed(2).split('.');
+function formatAmount(amount: number, decimalSep: string, thousandsSep: string): string {
+  const [intPart, decPart] = amount.toFixed(2).split(".");
   const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
   return `${formatted}${decimalSep}${decPart}`;
 }
@@ -28,7 +24,7 @@ function formatLastUpdated(timestamp: number): string {
   const diffMinutes = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMs / 3600000);
 
-  if (diffMinutes < 1) return 'just now';
+  if (diffMinutes < 1) return "just now";
   if (diffMinutes < 60) return `${diffMinutes}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
   return new Date(timestamp).toLocaleDateString();
@@ -41,13 +37,12 @@ export function NumericDisplay({
   rate,
   isStale,
   lastUpdated,
-  decimalSep = ',',
-  thousandsSep = '.',
+  decimalSep = ",",
+  thousandsSep = ".",
 }: NumericDisplayProps) {
   const homeInfo = getCurrency(homeCurrency);
-  const displayAmount = amount !== null
-    ? formatAmount(amount, decimalSep, thousandsSep)
-    : `0${decimalSep}00`;
+  const displayAmount =
+    amount !== null ? formatAmount(amount, decimalSep, thousandsSep) : `0${decimalSep}00`;
 
   return (
     <View
@@ -55,32 +50,26 @@ export function NumericDisplay({
       accessibilityLiveRegion="polite"
       accessibilityLabel={`${displayAmount} ${homeCurrency}`}
     >
-      <Text
-        style={styles.amount}
-        numberOfLines={1}
-        adjustsFontSizeToFit
-        minimumFontScale={0.5}
-      >
-        {homeInfo?.symbol ?? ''}{displayAmount}
+      <Text style={styles.amount} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.5}>
+        {homeInfo?.symbol ?? ""}
+        {displayAmount}
       </Text>
 
       {rate !== null && (
         <Text style={styles.rateInfo}>
           1 {homeCurrency} = {rate.toFixed(4)} {travelCurrency}
-          {lastUpdated ? ` · ${formatLastUpdated(lastUpdated)}` : ''}
+          {lastUpdated ? ` · ${formatLastUpdated(lastUpdated)}` : ""}
         </Text>
       )}
 
-      {isStale && (
-        <Text style={styles.staleWarning}>rates may be outdated</Text>
-      )}
+      {isStale && <Text style={styles.staleWarning}>rates may be outdated</Text>}
     </View>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: theme.spacing.md,
   },
   amount: {

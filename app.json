@@ -1,24 +1,20 @@
 {
   "expo": {
-    "name": "travel-rate",
-    "slug": "travel-rate",
+    "name": "Koin",
+    "slug": "koin",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "travelrate",
-    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nolliebigspin.travelrate",
+      "bundleIdentifier": "com.nolliebigspin.koin",
       "appleTeamId": "74H6Q6Y6VF"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#08233E"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -26,7 +22,7 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       "expo-router",
@@ -36,9 +32,9 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#0A0A0A",
+          "backgroundColor": "#08233E",
           "dark": {
-            "backgroundColor": "#0A0A0A"
+            "backgroundColor": "#08233E"
           }
         }
       ]

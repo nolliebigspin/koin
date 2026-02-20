@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native-unistyles';
 import { Platform } from 'react-native';
+import { StyleSheet } from 'react-native-unistyles';
 
 const fonts = Platform.select({
   ios: {
@@ -16,17 +16,17 @@ const fonts = Platform.select({
 
 const darkTheme = {
   colors: {
-    background: '#0A0A0A',
-    surface: '#1A1A1A',
-    surfaceElevated: '#2A2A2A',
+    background: '#08233E',
+    surface: '#0D2F52',
+    surfaceElevated: '#143E66', 
     text: '#FFFFFF',
-    textSecondary: '#999999',
-    textTertiary: '#666666',
+    textSecondary: '#A0BECF',
+    textTertiary: '#5E8499',
     accent: '#F5A623',
     accentDim: '#F5A62333',
-    border: '#333333',
-    error: '#FF4444',
-    success: '#44BB44',
+    border: '#1E4A70',
+    error: '#FF6B6B',
+    success: '#4ADE80',
   },
   spacing: {
     xs: 4,

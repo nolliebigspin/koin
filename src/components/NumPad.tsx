@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
@@ -19,13 +19,16 @@ export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
     [decimalKey]
   );
 
-  const handlePress = (key: string) => {
-    if (Platform.OS === "ios") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
-    // Always normalize to '.' internally for parseFloat
-    onPress(key === "," ? "." : key);
-  };
+  const handlePress = useCallback(
+    (key: string) => {
+      if (Platform.OS === "ios") {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      }
+      // Normalise decimal separator to '.' for parseFloat
+      onPress(key === "," ? "." : key);
+    },
+    [onPress]
+  );
 
   return (
     <View style={styles.container}>

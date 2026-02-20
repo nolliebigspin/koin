@@ -1,16 +1,15 @@
 import { useCallback, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { CurrencyPicker } from "@/components/CurrencyPicker";
-import { NumericDisplay } from "@/components/NumericDisplay";
-import { NumPad } from "@/components/NumPad";
-import { SettingsModal } from "@/components/SettingsModal";
-import type { Currency } from "@/constants/currencies";
-import { getCurrency } from "@/constants/currencies";
-import { useDecimalSeparator } from "@/hooks/useDecimalSeparator";
-import { useHomeCurrency } from "@/hooks/useHomeCurrency";
-import { useRates } from "@/hooks/useRates";
-import { useTravelCurrency } from "@/hooks/useTravelCurrency";
+import { CurrencyPicker } from "@/src/components/CurrencyPicker";
+import { NumericDisplay } from "@/src/components/NumericDisplay";
+import { NumPad } from "@/src/components/NumPad";
+import { SettingsModal } from "@/src/components/SettingsModal";
+import { type Currency, getCurrency } from "@/src/constants/currencies";
+import { useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
+import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
+import { useRates } from "@/src/hooks/useRates";
+import { useTravelCurrency } from "@/src/hooks/useTravelCurrency";
 
 function formatInputDisplay(raw: string, decimalSep: string, thousandsSep: string): string {
   if (!raw) return "0";
@@ -28,9 +27,7 @@ export default function TravelScreen() {
   const activeTravelCurrency = travelCurrency ?? "EUR";
 
   const [input, setInput] = useState("");
-  const [showHomePicker, setShowHomePicker] = useState(false);
-  const [showTravelPicker, setShowTravelPicker] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+  const [activeModal, setActiveModal] = useState<"home" | "travel" | "settings" | null>(null);
 
   const handleNumPadPress = useCallback((key: string) => {
     setInput((prev) => {
@@ -67,13 +64,13 @@ export default function TravelScreen() {
     return { convertedAmount: homeAmount, travelRate: rate };
   }, [rates, input, activeTravelCurrency]);
 
-  const homeInfo = getCurrency(homeCurrency ?? "USD");
-  const travelInfo = getCurrency(activeTravelCurrency);
+  const homeInfo = useMemo(() => getCurrency(homeCurrency ?? "USD"), [homeCurrency]);
+  const travelInfo = useMemo(() => getCurrency(activeTravelCurrency), [activeTravelCurrency]);
 
   const handleSelectHome = useCallback(
     (currency: Currency) => {
       setHomeCurrency(currency.code);
-      setShowHomePicker(false);
+      setActiveModal(null);
       setInput("");
     },
     [setHomeCurrency]
@@ -82,7 +79,7 @@ export default function TravelScreen() {
   const handleSelectTravel = useCallback(
     (currency: Currency) => {
       setTravelCurrency(currency.code);
-      setShowTravelPicker(false);
+      setActiveModal(null);
       setInput("");
     },
     [setTravelCurrency]
@@ -90,11 +87,10 @@ export default function TravelScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Top bar: home currency + settings */}
       <View style={styles.topBar}>
         <Pressable
           style={styles.homeCurrencyButton}
-          onPress={() => setShowHomePicker(true)}
+          onPress={() => setActiveModal("home")}
           accessibilityLabel={`Home currency: ${homeCurrency}. Tap to change.`}
         >
           <Text style={styles.homeCurrencyLabel}>
@@ -105,7 +101,7 @@ export default function TravelScreen() {
 
         <Pressable
           style={styles.settingsButton}
-          onPress={() => setShowSettings(true)}
+          onPress={() => setActiveModal("settings")}
           accessibilityLabel="Settings"
           hitSlop={12}
         >
@@ -113,10 +109,9 @@ export default function TravelScreen() {
         </Pressable>
       </View>
 
-      {/* Travel currency selector */}
       <Pressable
         style={styles.travelCurrencyButton}
-        onPress={() => setShowTravelPicker(true)}
+        onPress={() => setActiveModal("travel")}
         accessibilityLabel={`Travel currency: ${activeTravelCurrency}. Tap to change.`}
       >
         <Text style={styles.travelFlag}>{travelInfo?.flag}</Text>
@@ -124,12 +119,10 @@ export default function TravelScreen() {
         <Text style={styles.travelCountry}>{travelInfo?.country}</Text>
       </Pressable>
 
-      {/* Input display */}
       <Text style={styles.inputDisplay}>
         {formatInputDisplay(input, decimal, thousands)} {activeTravelCurrency}
       </Text>
 
-      {/* Converted result */}
       <NumericDisplay
         amount={convertedAmount}
         homeCurrency={homeCurrency ?? "USD"}
@@ -141,34 +134,33 @@ export default function TravelScreen() {
         thousandsSep={thousands}
       />
 
-      {/* Refresh button */}
       <Pressable
         style={styles.refreshButton}
-        onPress={() => refetch()}
+        onPress={() => {
+          void refetch();
+        }}
         accessibilityLabel="Refresh exchange rates"
       >
         <Text style={styles.refreshText}>{isLoading ? "Updating..." : "↻ Refresh rates"}</Text>
       </Pressable>
 
-      {/* NumPad pinned to bottom */}
       <View style={styles.numpadContainer}>
         <NumPad onPress={handleNumPadPress} decimalKey={decimal} />
       </View>
 
-      {/* Modals */}
       <CurrencyPicker
-        visible={showHomePicker}
+        visible={activeModal === "home"}
         onSelect={handleSelectHome}
-        onClose={() => setShowHomePicker(false)}
+        onClose={() => setActiveModal(null)}
         selected={homeCurrency}
       />
       <CurrencyPicker
-        visible={showTravelPicker}
+        visible={activeModal === "travel"}
         onSelect={handleSelectTravel}
-        onClose={() => setShowTravelPicker(false)}
+        onClose={() => setActiveModal(null)}
         selected={activeTravelCurrency}
       />
-      <SettingsModal visible={showSettings} onClose={() => setShowSettings(false)} />
+      <SettingsModal visible={activeModal === "settings"} onClose={() => setActiveModal(null)} />
     </View>
   );
 }

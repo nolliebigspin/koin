@@ -1,6 +1,6 @@
 import { Modal, Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { type DecimalSeparator, useDecimalSeparator } from "@/hooks/useDecimalSeparator";
+import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 
 interface SettingsModalProps {
   visible: boolean;

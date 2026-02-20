@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { StorageKeys, storage } from "@/lib/storage";
+import { StorageKeys, storage } from "@/src/lib/storage";
 
 interface RatesResponse {
   base: string;
@@ -48,8 +48,6 @@ async function fetchRates(baseCurrency: string): Promise<CachedRates> {
 }
 
 export function useRates(baseCurrency: string | undefined) {
-  const cached = getCachedRates();
-
   const query = useQuery({
     queryKey: ["rates", baseCurrency],
     queryFn: () => fetchRates(baseCurrency as string),
@@ -57,23 +55,22 @@ export function useRates(baseCurrency: string | undefined) {
     staleTime: 5 * 60 * 1000,
     gcTime: 24 * 60 * 60 * 1000,
     retry: 2,
-    placeholderData: (cached?.base === baseCurrency ? cached : undefined) as
-      | CachedRates
-      | undefined,
+    initialData: () => {
+      const cached = getCachedRates();
+      return cached?.base === baseCurrency ? cached : undefined;
+    },
+    initialDataUpdatedAt: () => {
+      const cached = getCachedRates();
+      return cached != null && cached.base === baseCurrency ? cached.lastUpdated : 0;
+    },
   });
 
-  const rates = query.data?.rates ?? cached?.rates ?? null;
-  const lastUpdated = query.data?.lastUpdated ?? cached?.lastUpdated ?? null;
-
-  const isStale =
-    query.isError || (!query.data && !!cached) || (!!cached && cached.base !== baseCurrency);
-
   return {
-    rates,
-    isLoading: query.isLoading && !cached,
-    isError: query.isError && !cached,
-    isStale,
+    rates: query.data?.rates ?? null,
+    isLoading: query.isFetching && !query.data,
+    isError: query.isError,
+    isStale: query.isStale || query.isError,
     refetch: query.refetch,
-    lastUpdated,
+    lastUpdated: query.data?.lastUpdated ?? null,
   };
 }

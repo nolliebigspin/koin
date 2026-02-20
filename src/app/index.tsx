@@ -1,5 +1,5 @@
 import { Redirect } from "expo-router";
-import { StorageKeys, storage } from "@/lib/storage";
+import { StorageKeys, storage } from "@/src/lib/storage";
 
 export default function IndexRedirect() {
   const homeCurrency = storage.getString(StorageKeys.HOME_CURRENCY);

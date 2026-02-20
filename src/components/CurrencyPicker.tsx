@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { type Currency, currencies } from "@/constants/currencies";
+import { type Currency, currencies } from "@/src/constants/currencies";
 
 interface CurrencyPickerProps {
   visible: boolean;
@@ -29,6 +29,10 @@ export function CurrencyPicker({
   mode = "modal",
 }: CurrencyPickerProps) {
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (!visible) setSearch("");
+  }, [visible]);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return currencies;

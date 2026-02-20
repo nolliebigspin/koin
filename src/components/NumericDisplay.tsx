@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { getCurrency } from "@/constants/currencies";
+import { getCurrency } from "@/src/constants/currencies";
 
 interface NumericDisplayProps {
   amount: number | null;

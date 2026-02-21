@@ -1,11 +1,12 @@
 import { Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { Pressable } from "react-native";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { NumericDisplay } from "@/src/components/NumericDisplay";
 import { NumPad } from "@/src/components/NumPad";
 import { SettingsModal } from "@/src/components/SettingsModal";
+import { Box, Text } from "@/src/components/ui";
 import { type Currency, getCurrency } from "@/src/constants/currencies";
 import { useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
@@ -20,6 +21,7 @@ function formatInputDisplay(raw: string, decimalSep: string, thousandsSep: strin
 }
 
 export default function TravelScreen() {
+  const { theme, rt } = useUnistyles();
   const { homeCurrency, setHomeCurrency } = useHomeCurrency();
   const { travelCurrency, setTravelCurrency } = useTravelCurrency();
   const { decimal, thousands } = useDecimalSeparator();
@@ -87,45 +89,53 @@ export default function TravelScreen() {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarSpacer} />
+    <Box flex={1} bg="background" style={{ paddingTop: rt.insets.top + theme.spacing.md }}>
+      <Box direction="row" align="center" px="md">
+        <Box flex={1} align="flex-end" />
         <Pressable
           style={styles.homeCurrencyButton}
           onPress={() => setActiveModal("home")}
           accessibilityLabel={`Home currency: ${homeCurrency}. Tap to change.`}
         >
-          <Text style={styles.homeCurrencyLabel}>
+          <Text variant="caption" color="textSecondary">
             {homeInfo?.flag} {homeCurrency}
           </Text>
-          <Text style={styles.changeHint}>change</Text>
+          <Text variant="caption" color="textTertiary" style={{ fontSize: 11 }}>
+            change
+          </Text>
         </Pressable>
 
-        <View style={styles.topBarSpacer}>
+        <Box flex={1} align="flex-end">
           <Pressable
             style={styles.settingsButton}
             onPress={() => setActiveModal("settings")}
             accessibilityLabel="Settings"
             hitSlop={12}
           >
-            <Settings color="#FFFFFF" pointerEvents="none" />
+            <Settings color={theme.colors.text} pointerEvents="none" />
           </Pressable>
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       <Pressable
         style={styles.travelCurrencyButton}
         onPress={() => setActiveModal("travel")}
         accessibilityLabel={`Travel currency: ${activeTravelCurrency}. Tap to change.`}
       >
-        <Text style={styles.travelFlag}>{travelInfo?.flag}</Text>
-        <Text style={styles.travelCode}>{activeTravelCurrency}</Text>
-        <Text style={styles.travelCountry}>{travelInfo?.country}</Text>
+        <Text style={{ fontSize: 44 }}>{travelInfo?.flag}</Text>
+        <Text variant="codeLarge" mt="xs">
+          {activeTravelCurrency}
+        </Text>
+        <Text variant="caption" color="textSecondary" mt="xs">
+          {travelInfo?.country}
+        </Text>
       </Pressable>
 
-      <Text style={styles.inputDisplay}>
-        {formatInputDisplay(input, decimal, thousands)} {activeTravelCurrency}
-      </Text>
+      <Box py="sm">
+        <Text variant="codeMedium" align="center">
+          {formatInputDisplay(input, decimal, thousands)} {activeTravelCurrency}
+        </Text>
+      </Box>
 
       <NumericDisplay
         amount={convertedAmount}
@@ -145,12 +155,17 @@ export default function TravelScreen() {
         }}
         accessibilityLabel="Refresh exchange rates"
       >
-        <Text style={styles.refreshText}>{isLoading ? "Updating..." : "↻ Refresh rates"}</Text>
+        <Text variant="caption" color="textTertiary">
+          {isLoading ? "Updating..." : "↻ Refresh rates"}
+        </Text>
       </Pressable>
 
-      <View style={styles.numpadContainer}>
+      <Box
+        pt="sm"
+        style={{ marginTop: "auto", paddingBottom: rt.insets.bottom + theme.spacing.md }}
+      >
         <NumPad onPress={handleNumPadPress} decimalKey={decimal} />
-      </View>
+      </Box>
 
       <CurrencyPickerModal
         visible={activeModal === "home"}
@@ -165,40 +180,17 @@ export default function TravelScreen() {
         selected={activeTravelCurrency}
       />
       <SettingsModal visible={activeModal === "settings"} onClose={() => setActiveModal(null)} />
-    </View>
+    </Box>
   );
 }
 
-const styles = StyleSheet.create((theme, rt) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    paddingTop: rt.insets.top + theme.spacing.md,
-  },
-  topBar: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: theme.spacing.md,
-  },
-  topBarSpacer: {
-    flex: 1,
-    alignItems: "flex-end",
-  },
+const styles = StyleSheet.create((theme) => ({
   homeCurrencyButton: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,
-  },
-  homeCurrencyLabel: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-  },
-  changeHint: {
-    color: theme.colors.textTertiary,
-    ...theme.typography.caption,
-    fontSize: 11,
   },
   settingsButton: {
     padding: theme.spacing.sm,
@@ -207,37 +199,9 @@ const styles = StyleSheet.create((theme, rt) => ({
     alignItems: "center",
     paddingVertical: theme.spacing.lg,
   },
-  travelFlag: {
-    fontSize: 44,
-  },
-  travelCode: {
-    color: theme.colors.text,
-    ...theme.typography.codeLarge,
-    marginTop: theme.spacing.xs,
-  },
-  travelCountry: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-    marginTop: theme.spacing.xs,
-  },
-  inputDisplay: {
-    color: theme.colors.text,
-    ...theme.typography.codeMedium,
-    textAlign: "center",
-    paddingVertical: theme.spacing.sm,
-  },
   refreshButton: {
     alignSelf: "center",
     paddingVertical: theme.spacing.xs,
     paddingHorizontal: theme.spacing.md,
-  },
-  refreshText: {
-    color: theme.colors.textTertiary,
-    ...theme.typography.caption,
-  },
-  numpadContainer: {
-    marginTop: "auto",
-    paddingTop: theme.spacing.sm,
-    paddingBottom: rt.insets.bottom + theme.spacing.md,
   },
 }));

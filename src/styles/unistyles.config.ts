@@ -27,8 +27,10 @@ const darkTheme = {
     border: "#1E4A70",
     error: "#FF6B6B",
     success: "#4ADE80",
+    placeholder: "#999999",
   },
   spacing: {
+    xxs: 2,
     xs: 4,
     sm: 8,
     md: 16,
@@ -70,6 +72,11 @@ const darkTheme = {
     numpad: {
       fontSize: 28,
       fontWeight: "500" as const,
+      fontFamily: fonts.sans,
+    },
+    button: {
+      fontSize: 17,
+      fontWeight: "600" as const,
       fontFamily: fonts.sans,
     },
   },

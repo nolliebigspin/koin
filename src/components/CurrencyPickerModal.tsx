@@ -6,11 +6,10 @@ import {
   Modal,
   Platform,
   Pressable,
-  Text,
   TextInput,
-  View,
 } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { Box, Text } from "@/src/components/ui";
 import { type Currency, currencies } from "@/src/constants/currencies";
 
 type CurrencyPickerModalProps = {
@@ -28,6 +27,7 @@ export function CurrencyPickerModal({
   selected,
   mode = "modal",
 }: CurrencyPickerModalProps) {
+  const { theme } = useUnistyles();
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -67,12 +67,12 @@ export function CurrencyPickerModal({
           accessibilityLabel={`${item.name}, ${item.code}`}
         >
           <Text style={styles.flag}>{item.flag}</Text>
-          <View style={styles.rowText}>
-            <Text style={styles.code}>{item.code}</Text>
-            <Text style={styles.name} numberOfLines={1}>
+          <Box flex={1}>
+            <Text variant="codeMedium">{item.code}</Text>
+            <Text variant="caption" color="textSecondary" mt="xxs" numberOfLines={1}>
               {item.country} · {item.name}
             </Text>
-          </View>
+          </Box>
         </Pressable>
       );
     },
@@ -87,30 +87,30 @@ export function CurrencyPickerModal({
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       {mode === "modal" && (
-        <View style={styles.header}>
+        <Box direction="row" justify="flex-end" p="lg" px="md">
           <Pressable
             onPress={onClose}
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="Close"
           >
-            <Text style={styles.closeButton}>Close</Text>
+            <Text variant="button">Close</Text>
           </Pressable>
-        </View>
+        </Box>
       )}
 
-      <View style={styles.searchContainer}>
+      <Box px="md" pb="sm">
         <TextInput
           style={styles.searchInput}
           placeholder="Search currency or country..."
-          placeholderTextColor="#999999"
+          placeholderTextColor={theme.colors.placeholder}
           value={search}
           onChangeText={setSearch}
           autoCorrect={false}
           autoCapitalize="none"
           returnKeyType="search"
         />
-      </View>
+      </Box>
 
       <FlatList
         data={filtered}
@@ -144,21 +144,6 @@ const styles = StyleSheet.create((theme) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingHorizontal: theme.spacing.md,
-    padding: theme.spacing.lg,
-  },
-  closeButton: {
-    color: theme.colors.text,
-    fontSize: 17,
-    fontWeight: "600",
-  },
-  searchContainer: {
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
-  },
   searchInput: {
     backgroundColor: theme.colors.surface,
     color: theme.colors.text,
@@ -183,17 +168,5 @@ const styles = StyleSheet.create((theme) => ({
   flag: {
     fontSize: 28,
     marginRight: theme.spacing.sm + 4,
-  },
-  rowText: {
-    flex: 1,
-  },
-  code: {
-    color: theme.colors.text,
-    ...theme.typography.codeMedium,
-  },
-  name: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-    marginTop: 2,
   },
 }));

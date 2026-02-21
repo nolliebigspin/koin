@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
+import { StyleSheet } from "react-native-unistyles";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,7 +19,7 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: "#0A0A0A" },
+          contentStyle: styles.content,
           animation: "fade",
         }}
       />
@@ -26,3 +27,9 @@ export default function RootLayout() {
     </QueryClientProvider>
   );
 }
+
+const styles = StyleSheet.create((theme) => ({
+  content: {
+    backgroundColor: theme.colors.background,
+  },
+}));

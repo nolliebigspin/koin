@@ -1,5 +1,6 @@
-import { Modal, Pressable, Text, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { Modal, Pressable, View } from "react-native";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
+import { Box, Text } from "@/src/components/ui";
 import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 
 type SettingsModalProps = {
@@ -8,6 +9,7 @@ type SettingsModalProps = {
 };
 
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
+  const { theme } = useUnistyles();
   const { decimal, setDecimal } = useDecimalSeparator();
 
   const options: { value: DecimalSeparator; label: string; example: string }[] = [
@@ -22,20 +24,27 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
       presentationStyle="formSheet"
       onRequestClose={onClose}
     >
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Settings</Text>
+      <Box flex={1} bg="background" p="lg">
+        <Box direction="row" justify="space-between" align="center" pb="xl">
+          <Text variant="heading">Settings</Text>
           <Pressable
             onPress={onClose}
             hitSlop={12}
             accessibilityRole="button"
             accessibilityLabel="Close"
           >
-            <Text style={styles.closeButton}>Done</Text>
+            <Text variant="button">Done</Text>
           </Pressable>
-        </View>
+        </Box>
 
-        <Text style={styles.sectionLabel}>Decimal separator</Text>
+        <Text
+          variant="caption"
+          color="textSecondary"
+          mb="sm"
+          style={{ textTransform: "uppercase", letterSpacing: 1 }}
+        >
+          Decimal separator
+        </Text>
 
         {options.map((opt) => {
           const isActive = decimal === opt.value;
@@ -48,49 +57,31 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
               accessibilityState={{ selected: isActive }}
               accessibilityLabel={`${opt.label}, example: ${opt.example}`}
             >
-              <View style={styles.optionContent}>
-                <Text style={styles.optionLabel}>{opt.label}</Text>
-                <Text style={styles.optionExample}>{opt.example}</Text>
-              </View>
+              <Box flex={1}>
+                <Text variant="body" style={{ fontWeight: "600" }}>
+                  {opt.label}
+                </Text>
+                <Text
+                  variant="caption"
+                  color="textSecondary"
+                  mt="xxs"
+                  style={{ fontFamily: theme.fonts.mono }}
+                >
+                  {opt.example}
+                </Text>
+              </Box>
               <View style={[styles.radio, isActive && styles.radioActive]}>
-                {isActive && <View style={styles.radioDot} />}
+                {isActive && <Box width={12} height={12} radius="full" bg="accent" />}
               </View>
             </Pressable>
           );
         })}
-      </View>
+      </Box>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-    padding: theme.spacing.lg,
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingBottom: theme.spacing.xl,
-  },
-  title: {
-    color: theme.colors.text,
-    ...theme.typography.heading,
-  },
-  closeButton: {
-    color: theme.colors.text,
-    fontSize: 17,
-    fontWeight: "600",
-  },
-  sectionLabel: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: theme.spacing.sm,
-  },
   option: {
     flexDirection: "row",
     alignItems: "center",
@@ -105,24 +96,10 @@ const styles = StyleSheet.create((theme) => ({
   optionActive: {
     backgroundColor: theme.colors.accentDim,
   },
-  optionContent: {
-    flex: 1,
-  },
-  optionLabel: {
-    color: theme.colors.text,
-    ...theme.typography.body,
-    fontWeight: "600",
-  },
-  optionExample: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-    fontFamily: theme.fonts.mono,
-    marginTop: 2,
-  },
   radio: {
     width: 24,
     height: 24,
-    borderRadius: 12,
+    borderRadius: theme.radius.full,
     borderWidth: 2,
     borderColor: theme.colors.textTertiary,
     alignItems: "center",
@@ -131,11 +108,5 @@ const styles = StyleSheet.create((theme) => ({
   },
   radioActive: {
     borderColor: theme.colors.accent,
-  },
-  radioDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: theme.colors.accent,
   },
 }));

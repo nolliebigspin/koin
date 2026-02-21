@@ -1,7 +1,8 @@
 import * as Haptics from "expo-haptics";
 import { useCallback, useMemo } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
+import { Box, Text } from "@/src/components/ui";
 
 type NumPadProps = {
   onPress: (key: string) => void;
@@ -31,9 +32,9 @@ export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
   );
 
   return (
-    <View style={styles.container}>
+    <Box px="md" pb="md">
       {keys.map((row) => (
-        <View key={row[0]} style={styles.row}>
+        <Box key={row[0]} direction="row" justify="space-around">
           {row.map((key) => (
             <Pressable
               key={key}
@@ -44,24 +45,18 @@ export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
                 key === "⌫" ? "Backspace" : key === "," || key === "." ? "Decimal point" : key
               }
             >
-              <Text style={[styles.keyText, key === "⌫" && styles.backspaceText]}>{key}</Text>
+              <Text variant="numpad" style={key === "⌫" ? { fontSize: 24 } : undefined}>
+                {key}
+              </Text>
             </Pressable>
           ))}
-        </View>
+        </Box>
       ))}
-    </View>
+    </Box>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
-  container: {
-    paddingHorizontal: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
   key: {
     flex: 1,
     alignItems: "center",
@@ -75,12 +70,5 @@ const styles = StyleSheet.create((theme) => ({
   },
   keyPressed: {
     backgroundColor: theme.colors.surfaceElevated,
-  },
-  keyText: {
-    color: theme.colors.text,
-    ...theme.typography.numpad,
-  },
-  backspaceText: {
-    fontSize: 24,
   },
 }));

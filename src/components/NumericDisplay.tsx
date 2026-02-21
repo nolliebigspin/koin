@@ -1,5 +1,4 @@
-import { Text, View } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { Box, Text } from "@/src/components/ui";
 import { getCurrency } from "@/src/constants/currencies";
 
 type NumericDisplayProps = {
@@ -45,45 +44,35 @@ export function NumericDisplay({
     amount !== null ? formatAmount(amount, decimalSep, thousandsSep) : `0${decimalSep}00`;
 
   return (
-    <View
-      style={styles.container}
+    <Box
+      align="center"
+      py="md"
       accessibilityLiveRegion="polite"
       accessibilityLabel={`${displayAmount} ${homeCurrency}`}
     >
-      <Text style={styles.amount} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.5}>
+      <Text
+        variant="resultLarge"
+        color="accent"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.5}
+      >
         {homeInfo?.symbol ?? ""}
         {displayAmount}
       </Text>
 
       {rate !== null && (
-        <Text style={styles.rateInfo}>
+        <Text variant="caption" color="textSecondary" mt="xs">
           1 {homeCurrency} = {rate.toFixed(4)} {travelCurrency}
           {lastUpdated ? ` · ${formatLastUpdated(lastUpdated)}` : ""}
         </Text>
       )}
 
-      {isStale && <Text style={styles.staleWarning}>rates may be outdated</Text>}
-    </View>
+      {isStale && (
+        <Text variant="caption" color="error" mt="xs">
+          rates may be outdated
+        </Text>
+      )}
+    </Box>
   );
 }
-
-const styles = StyleSheet.create((theme) => ({
-  container: {
-    alignItems: "center",
-    paddingVertical: theme.spacing.md,
-  },
-  amount: {
-    color: theme.colors.accent,
-    ...theme.typography.resultLarge,
-  },
-  rateInfo: {
-    color: theme.colors.textSecondary,
-    ...theme.typography.caption,
-    marginTop: theme.spacing.xs,
-  },
-  staleWarning: {
-    color: theme.colors.error,
-    ...theme.typography.caption,
-    marginTop: theme.spacing.xs,
-  },
-}));

@@ -1,7 +1,8 @@
+import { Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { CurrencyPicker } from "@/src/components/CurrencyPicker";
+import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { NumericDisplay } from "@/src/components/NumericDisplay";
 import { NumPad } from "@/src/components/NumPad";
 import { SettingsModal } from "@/src/components/SettingsModal";
@@ -88,6 +89,7 @@ export default function TravelScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
+        <View style={styles.topBarSpacer} />
         <Pressable
           style={styles.homeCurrencyButton}
           onPress={() => setActiveModal("home")}
@@ -99,14 +101,16 @@ export default function TravelScreen() {
           <Text style={styles.changeHint}>change</Text>
         </Pressable>
 
-        <Pressable
-          style={styles.settingsButton}
-          onPress={() => setActiveModal("settings")}
-          accessibilityLabel="Settings"
-          hitSlop={12}
-        >
-          <Text style={styles.settingsIcon}>⚙</Text>
-        </Pressable>
+        <View style={styles.topBarSpacer}>
+          <Pressable
+            style={styles.settingsButton}
+            onPress={() => setActiveModal("settings")}
+            accessibilityLabel="Settings"
+            hitSlop={12}
+          >
+            <Settings color="#FFFFFF" pointerEvents="none" />
+          </Pressable>
+        </View>
       </View>
 
       <Pressable
@@ -148,13 +152,13 @@ export default function TravelScreen() {
         <NumPad onPress={handleNumPadPress} decimalKey={decimal} />
       </View>
 
-      <CurrencyPicker
+      <CurrencyPickerModal
         visible={activeModal === "home"}
         onSelect={handleSelectHome}
         onClose={() => setActiveModal(null)}
         selected={homeCurrency}
       />
-      <CurrencyPicker
+      <CurrencyPickerModal
         visible={activeModal === "travel"}
         onSelect={handleSelectTravel}
         onClose={() => setActiveModal(null)}
@@ -173,9 +177,12 @@ const styles = StyleSheet.create((theme, rt) => ({
   },
   topBar: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: theme.spacing.md,
+  },
+  topBarSpacer: {
+    flex: 1,
+    alignItems: "flex-end",
   },
   homeCurrencyButton: {
     flexDirection: "row",
@@ -194,13 +201,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     fontSize: 11,
   },
   settingsButton: {
-    position: "absolute",
-    right: theme.spacing.md,
     padding: theme.spacing.sm,
-  },
-  settingsIcon: {
-    fontSize: 20,
-    color: theme.colors.textTertiary,
   },
   travelCurrencyButton: {
     alignItems: "center",

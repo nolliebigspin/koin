@@ -13,7 +13,7 @@ import {
 import { StyleSheet } from "react-native-unistyles";
 import { type Currency, currencies } from "@/src/constants/currencies";
 
-type CurrencyPickerProps = {
+type CurrencyPickerModalProps = {
   visible: boolean;
   onSelect: (currency: Currency) => void;
   onClose: () => void;
@@ -21,13 +21,13 @@ type CurrencyPickerProps = {
   mode?: "modal" | "inline";
 };
 
-export function CurrencyPicker({
+export function CurrencyPickerModal({
   visible,
   onSelect,
   onClose,
   selected,
   mode = "modal",
-}: CurrencyPickerProps) {
+}: CurrencyPickerModalProps) {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -103,7 +103,7 @@ export function CurrencyPicker({
         <TextInput
           style={styles.searchInput}
           placeholder="Search currency or country..."
-          placeholderTextColor="#666666"
+          placeholderTextColor="#999999"
           value={search}
           onChangeText={setSearch}
           autoCorrect={false}
@@ -139,7 +139,7 @@ export function CurrencyPicker({
   );
 }
 
-const styles = StyleSheet.create((theme, rt) => ({
+const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -148,11 +148,10 @@ const styles = StyleSheet.create((theme, rt) => ({
     flexDirection: "row",
     justifyContent: "flex-end",
     paddingHorizontal: theme.spacing.md,
-    paddingTop: rt.insets.top + theme.spacing.sm,
-    paddingBottom: theme.spacing.sm,
+    padding: theme.spacing.lg,
   },
   closeButton: {
-    color: theme.colors.accent,
+    color: theme.colors.text,
     fontSize: 17,
     fontWeight: "600",
   },

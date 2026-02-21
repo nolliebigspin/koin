@@ -2,7 +2,7 @@ import { router } from "expo-router";
 import { useCallback } from "react";
 import { Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
-import { CurrencyPicker } from "@/src/components/CurrencyPicker";
+import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import type { Currency } from "@/src/constants/currencies";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
 
@@ -24,7 +24,12 @@ export default function OnboardingScreen() {
         <Text style={styles.subtitle}>This is the currency you think in.</Text>
       </View>
 
-      <CurrencyPicker visible={true} onSelect={handleSelect} onClose={() => {}} mode="inline" />
+      <CurrencyPickerModal
+        visible={true}
+        onSelect={handleSelect}
+        onClose={() => {}}
+        mode="inline"
+      />
     </View>
   );
 }

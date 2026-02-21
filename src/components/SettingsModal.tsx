@@ -63,12 +63,11 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
   );
 }
 
-const styles = StyleSheet.create((theme, rt) => ({
+const styles = StyleSheet.create((theme) => ({
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
-    paddingTop: rt.insets.top + theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
+    padding: theme.spacing.lg,
   },
   header: {
     flexDirection: "row",
@@ -81,7 +80,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     ...theme.typography.heading,
   },
   closeButton: {
-    color: theme.colors.accent,
+    color: theme.colors.text,
     fontSize: 17,
     fontWeight: "600",
   },

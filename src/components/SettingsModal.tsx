@@ -2,10 +2,10 @@ import { Modal, Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 
-interface SettingsModalProps {
+type SettingsModalProps = {
   visible: boolean;
   onClose: () => void;
-}
+};
 
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
   const { decimal, setDecimal } = useDecimalSeparator();
@@ -97,7 +97,7 @@ const styles = StyleSheet.create((theme, rt) => ({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.md,
+    borderRadius: theme.radius.md,
     paddingVertical: theme.spacing.md,
     paddingHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.sm,

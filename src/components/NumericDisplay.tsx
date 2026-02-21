@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { getCurrency } from "@/src/constants/currencies";
 
-interface NumericDisplayProps {
+type NumericDisplayProps = {
   amount: number | null;
   homeCurrency: string;
   travelCurrency: string;
@@ -11,7 +11,7 @@ interface NumericDisplayProps {
   lastUpdated: number | null;
   decimalSep?: "," | ".";
   thousandsSep?: "." | ",";
-}
+};
 
 function formatAmount(amount: number, decimalSep: string, thousandsSep: string): string {
   const [intPart, decPart] = amount.toFixed(2).split(".");

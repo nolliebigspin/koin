@@ -3,10 +3,10 @@ import { useCallback, useMemo } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 
-interface NumPadProps {
+type NumPadProps = {
   onPress: (key: string) => void;
   decimalKey?: "," | ".";
-}
+};
 
 export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
   const keys = useMemo(
@@ -71,7 +71,7 @@ const styles = StyleSheet.create((theme) => ({
     marginVertical: theme.spacing.xs,
     minHeight: 56,
     minWidth: 56,
-    borderRadius: theme.radii.md,
+    borderRadius: theme.radius.md,
   },
   keyPressed: {
     backgroundColor: theme.colors.surfaceElevated,

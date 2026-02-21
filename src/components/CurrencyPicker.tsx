@@ -13,13 +13,13 @@ import {
 import { StyleSheet } from "react-native-unistyles";
 import { type Currency, currencies } from "@/src/constants/currencies";
 
-interface CurrencyPickerProps {
+type CurrencyPickerProps = {
   visible: boolean;
   onSelect: (currency: Currency) => void;
   onClose: () => void;
   selected?: string;
   mode?: "modal" | "inline";
-}
+};
 
 export function CurrencyPicker({
   visible,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create((theme, rt) => ({
   searchInput: {
     backgroundColor: theme.colors.surface,
     color: theme.colors.text,
-    borderRadius: theme.radii.md,
+    borderRadius: theme.radius.md,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm + 4,
     fontSize: 16,

@@ -1,10 +1,10 @@
-export interface Currency {
+export type Currency = {
   code: string;
   name: string;
   flag: string;
   country: string;
   symbol: string;
-}
+};
 
 export const currencies: Currency[] = [
   { code: "AED", name: "UAE Dirham", flag: "🇦🇪", country: "United Arab Emirates", symbol: "د.إ" },

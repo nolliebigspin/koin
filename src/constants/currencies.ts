@@ -25,6 +25,7 @@ export const currencies: Currency[] = [
   { code: "JPY", name: "Japanese Yen", flag: "🇯🇵", country: "Japan", symbol: "¥" },
   { code: "KRW", name: "South Korean Won", flag: "🇰🇷", country: "South Korea", symbol: "₩" },
   { code: "MXN", name: "Mexican Peso", flag: "🇲🇽", country: "Mexico", symbol: "$" },
+  { code: "MYR", name: "Malaysian Ringgit", flag: "🇲🇾", country: "Malaysia", symbol: "RM" },
   { code: "NOK", name: "Norwegian Krone", flag: "🇳🇴", country: "Norway", symbol: "kr" },
   { code: "NZD", name: "New Zealand Dollar", flag: "🇳🇿", country: "New Zealand", symbol: "NZ$" },
   { code: "PHP", name: "Philippine Peso", flag: "🇵🇭", country: "Philippines", symbol: "₱" },

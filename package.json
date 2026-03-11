@@ -9,10 +9,12 @@
     "ios": "bun run --filter @koin/app ios",
     "android": "bun run --filter @koin/app android",
     "build:release": "bun run --filter @koin/app build:release",
+    "api:dev": "bun run --filter @koin/api dev",
+    "api:start": "bun run --filter @koin/api start",
     "check:lint": "biome lint --write ./apps/",
     "check:format": "biome format --write ./apps/",
     "check:imports": "biome check --formatter-enabled=false --linter-enabled=false --write ./apps/",
-    "check:ts": "bun run --filter @koin/app check:ts",
+    "check:ts": "bun run --filter '*' check:ts",
     "check:all": "bun check:imports && bun check:format && bun check:lint && bun check:ts"
   },
   "devDependencies": {

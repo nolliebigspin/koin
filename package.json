@@ -1,44 +1,21 @@
 {
   "name": "koin",
-  "main": "./index.ts",
-  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "start": "expo start",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "build:release": "expo run:ios --device --configuration Release",
-    "check:lint": "biome lint --write ./",
-    "check:format": "biome format --write ./",
-    "check:imports": "biome check --formatter-enabled=false --linter-enabled=false --write ./",
-    "check:ts": "tsc --noEmit",
+    "start": "bun run --filter @koin/app start",
+    "ios": "bun run --filter @koin/app ios",
+    "android": "bun run --filter @koin/app android",
+    "build:release": "bun run --filter @koin/app build:release",
+    "check:lint": "biome lint --write ./apps/",
+    "check:format": "biome format --write ./apps/",
+    "check:imports": "biome check --formatter-enabled=false --linter-enabled=false --write ./apps/",
+    "check:ts": "bun run --filter @koin/app check:ts",
     "check:all": "bun check:imports && bun check:format && bun check:lint && bun check:ts"
   },
-  "dependencies": {
-    "@tanstack/react-query": "^5.90.21",
-    "expo": "~54.0.33",
-    "expo-dev-client": "^6.0.20",
-    "expo-haptics": "~15.0.8",
-    "expo-router": "~6.0.23",
-    "expo-splash-screen": "~31.0.13",
-    "expo-status-bar": "~3.0.9",
-    "lucide-react-native": "^0.575.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-edge-to-edge": "^1.7.0",
-    "react-native-gesture-handler": "~2.28.0",
-    "react-native-mmkv": "^4.1.2",
-    "react-native-nitro-modules": "^0.33.9",
-    "react-native-reanimated": "~4.1.1",
-    "react-native-safe-area-context": "~5.6.0",
-    "react-native-screens": "~4.16.0",
-    "react-native-unistyles": "^3.0.24",
-    "react-native-worklets": "0.5.1"
-  },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.3",
-    "@types/react": "~19.1.0",
-    "typescript": "~5.9.2"
-  },
-  "private": true
+    "@biomejs/biome": "^2.4.3"
+  }
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.3/schema.json",
   "files": {
-    "includes": ["**", "!**/.expo", "!**/node_modules", "!ios", "!android"]
+    "includes": ["apps/**", "!apps/**/.expo", "!**/node_modules", "!apps/**/ios", "!apps/**/android"]
   },
   "vcs": {
     "enabled": true,

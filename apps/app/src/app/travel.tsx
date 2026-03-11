@@ -1,3 +1,4 @@
+import { type Currency, getCurrency } from "@koin/shared";
 import { Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Pressable } from "react-native";
@@ -7,7 +8,6 @@ import { NumericDisplay } from "@/src/components/NumericDisplay";
 import { NumPad } from "@/src/components/NumPad";
 import { SettingsModal } from "@/src/components/SettingsModal";
 import { Box, Text } from "@/src/components/ui";
-import { type Currency, getCurrency } from "@/src/constants/currencies";
 import { useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
 import { useRates } from "@/src/hooks/useRates";

@@ -1,3 +1,4 @@
+import { type Currency, currencies } from "@koin/shared";
 import * as Haptics from "expo-haptics";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -10,7 +11,6 @@ import {
 } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
-import { type Currency, currencies } from "@/src/constants/currencies";
 
 type CurrencyPickerModalProps = {
   visible: boolean;

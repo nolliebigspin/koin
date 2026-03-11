@@ -1,18 +1,6 @@
+import type { CachedRates, RatesResponse } from "@koin/shared";
 import { CURRENCIES, UPDATE_INTERVAL_MS } from "./config";
 import redis from "./redis";
-
-type RatesResponse = {
-  base: string;
-  date: string;
-  time_last_updated: number;
-  rates: Record<string, number>;
-};
-
-type CachedRates = {
-  base: string;
-  rates: Record<string, number>;
-  lastUpdated: number;
-};
 
 async function fetchAndCacheRates(base: string): Promise<void> {
   const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);

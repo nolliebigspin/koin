@@ -1,37 +1,4 @@
-export const CURRENCIES = [
-  "AED",
-  "AUD",
-  "BRL",
-  "CAD",
-  "CHF",
-  "CNY",
-  "COP",
-  "CZK",
-  "DKK",
-  "EUR",
-  "GBP",
-  "HKD",
-  "IDR",
-  "ILS",
-  "INR",
-  "JPY",
-  "KRW",
-  "MXN",
-  "MYR",
-  "NOK",
-  "NZD",
-  "PHP",
-  "PLN",
-  "RUB",
-  "SEK",
-  "SGD",
-  "THB",
-  "TRY",
-  "TWD",
-  "USD",
-  "VND",
-  "ZAR",
-] as const;
+export { CURRENCIES } from "@koin/shared";
 
 export const UPDATE_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 export const API_PORT = Number(process.env.PORT) || 4001;

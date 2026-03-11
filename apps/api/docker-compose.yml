@@ -5,7 +5,9 @@ services:
       - "6379:6379"
 
   api:
-    build: .
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
     ports:
       - "4001:4001"
     environment:

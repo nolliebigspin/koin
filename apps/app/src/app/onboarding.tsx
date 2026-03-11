@@ -1,9 +1,9 @@
+import type { Currency } from "@koin/shared";
 import { router } from "expo-router";
 import { useCallback } from "react";
 import { useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { Box, Text } from "@/src/components/ui";
-import type { Currency } from "@/src/constants/currencies";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
 
 export default function OnboardingScreen() {

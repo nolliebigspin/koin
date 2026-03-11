@@ -41,6 +41,8 @@ export const currencies: Currency[] = [
   { code: "ZAR", name: "South African Rand", flag: "🇿🇦", country: "South Africa", symbol: "R" },
 ];
 
+export const CURRENCIES = currencies.map((c) => c.code);
+
 export function getCurrency(code: string): Currency | undefined {
   return currencies.find((c) => c.code === code);
 }

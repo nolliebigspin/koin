@@ -2,7 +2,8 @@
   "name": "koin",
   "private": true,
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "start": "bun run --filter @koin/app start",

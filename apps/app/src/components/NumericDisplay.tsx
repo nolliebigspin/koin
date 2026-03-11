@@ -1,5 +1,5 @@
+import { getCurrency } from "@koin/shared";
 import { Box, Text } from "@/src/components/ui";
-import { getCurrency } from "@/src/constants/currencies";
 
 type NumericDisplayProps = {
   amount: number | null;

@@ -7,6 +7,9 @@
     "start": "bun run src/index.ts",
     "check:ts": "tsc --noEmit"
   },
+  "dependencies": {
+    "@koin/shared": "workspace:*"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "typescript": "~5.9.2"

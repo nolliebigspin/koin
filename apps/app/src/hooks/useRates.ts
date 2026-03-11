@@ -1,18 +1,6 @@
+import type { CachedRates, RatesResponse } from "@koin/shared";
 import { useQuery } from "@tanstack/react-query";
 import { StorageKeys, storage } from "@/src/lib/storage";
-
-type RatesResponse = {
-  base: string;
-  date: string;
-  time_last_updated: number;
-  rates: Record<string, number>;
-};
-
-type CachedRates = {
-  rates: Record<string, number>;
-  lastUpdated: number;
-  base: string;
-};
 
 function getCachedRates(): CachedRates | null {
   const raw = storage.getString(StorageKeys.CACHED_RATES);

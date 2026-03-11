@@ -1,4 +1,4 @@
-import type { CachedRates, RatesResponse } from "@koin/shared";
+import type { CachedRates } from "@koin/shared";
 import { useQuery } from "@tanstack/react-query";
 import { StorageKeys, storage } from "@/src/lib/storage";
 
@@ -17,19 +17,13 @@ function setCachedRates(data: CachedRates): void {
 }
 
 async function fetchRates(baseCurrency: string): Promise<CachedRates> {
-  const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
+  const response = await fetch(`https://koin.awinter.dev/rates/${baseCurrency}`);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch rates: ${response.status}`);
   }
 
-  const data: RatesResponse = await response.json();
-
-  const cached: CachedRates = {
-    rates: data.rates,
-    lastUpdated: data.time_last_updated * 1000,
-    base: data.base,
-  };
+  const cached: CachedRates = await response.json();
 
   setCachedRates(cached);
   return cached;

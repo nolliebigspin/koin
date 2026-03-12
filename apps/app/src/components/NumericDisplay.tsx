@@ -1,4 +1,5 @@
 import { getCurrency } from "@koin/shared";
+import { Pressable } from "react-native";
 import { Box, Text } from "@/src/components/ui";
 
 type NumericDisplayProps = {
@@ -6,10 +7,9 @@ type NumericDisplayProps = {
   homeCurrency: string;
   travelCurrency: string;
   rate: number | null;
-  isStale: boolean;
-  lastUpdated: number | null;
   decimalSep?: "," | ".";
   thousandsSep?: "." | ",";
+  onHomeCurrencyPress?: () => void;
 };
 
 function formatAmount(amount: number, decimalSep: string, thousandsSep: string): string {
@@ -18,26 +18,14 @@ function formatAmount(amount: number, decimalSep: string, thousandsSep: string):
   return `${formatted}${decimalSep}${decPart}`;
 }
 
-function formatLastUpdated(timestamp: number): string {
-  const diffMs = Date.now() - timestamp;
-  const diffMinutes = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-
-  if (diffMinutes < 1) return "just now";
-  if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return new Date(timestamp).toLocaleDateString();
-}
-
 export function NumericDisplay({
   amount,
   homeCurrency,
   travelCurrency,
   rate,
-  isStale,
-  lastUpdated,
   decimalSep = ",",
   thousandsSep = ".",
+  onHomeCurrencyPress,
 }: NumericDisplayProps) {
   const homeInfo = getCurrency(homeCurrency);
   const displayAmount =
@@ -61,16 +49,23 @@ export function NumericDisplay({
         {displayAmount}
       </Text>
 
+      <Pressable
+        onPress={onHomeCurrencyPress}
+        style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 8 }}
+        accessibilityLabel={`Home currency: ${homeInfo?.name}, ${homeCurrency}. Tap to change.`}
+        accessibilityRole="button"
+      >
+        <Text variant="body" color="textSecondary">
+          {homeInfo?.flag} {homeInfo?.name} ({homeCurrency})
+        </Text>
+        <Text variant="caption" color="textTertiary" style={{ fontSize: 11 }}>
+          change
+        </Text>
+      </Pressable>
+
       {rate !== null && (
         <Text variant="caption" color="textSecondary" mt="xs">
           1 {homeCurrency} = {rate.toFixed(4)} {travelCurrency}
-          {lastUpdated ? ` · ${formatLastUpdated(lastUpdated)}` : ""}
-        </Text>
-      )}
-
-      {isStale && (
-        <Text variant="caption" color="error" mt="xs">
-          rates may be outdated
         </Text>
       )}
     </Box>

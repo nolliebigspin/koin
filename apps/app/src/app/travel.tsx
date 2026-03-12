@@ -1,7 +1,8 @@
 import { type Currency, getCurrency } from "@koin/shared";
-import { Settings } from "lucide-react-native";
+import * as Haptics from "expo-haptics";
+import { ArrowUpDown, Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
-import { Pressable } from "react-native";
+import { Platform, Pressable } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { NumericDisplay } from "@/src/components/NumericDisplay";
@@ -25,7 +26,7 @@ export default function TravelScreen() {
   const { homeCurrency, setHomeCurrency } = useHomeCurrency();
   const { travelCurrency, setTravelCurrency } = useTravelCurrency();
   const { decimal, thousands } = useDecimalSeparator();
-  const { rates, isLoading, isStale, refetch, lastUpdated } = useRates(homeCurrency);
+  const { rates } = useRates(homeCurrency);
 
   const activeTravelCurrency = travelCurrency ?? "EUR";
 
@@ -67,7 +68,6 @@ export default function TravelScreen() {
     return { convertedAmount: homeAmount, travelRate: rate };
   }, [rates, input, activeTravelCurrency]);
 
-  const homeInfo = useMemo(() => getCurrency(homeCurrency ?? "USD"), [homeCurrency]);
   const travelInfo = useMemo(() => getCurrency(activeTravelCurrency), [activeTravelCurrency]);
 
   const handleSelectHome = useCallback(
@@ -88,82 +88,86 @@ export default function TravelScreen() {
     [setTravelCurrency]
   );
 
+  const handleSwap = useCallback(() => {
+    const oldHome = homeCurrency;
+    const oldTravel = activeTravelCurrency;
+    setHomeCurrency(oldTravel);
+    setTravelCurrency(oldHome ?? "USD");
+    setInput("");
+    if (Platform.OS === "ios") {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+  }, [homeCurrency, activeTravelCurrency, setHomeCurrency, setTravelCurrency]);
+
   return (
     <Box flex={1} bg="background" style={{ paddingTop: rt.insets.top + theme.spacing.md }}>
-      <Box direction="row" align="center" px="md">
-        <Box flex={1} align="flex-end" />
+      {/* Top bar: settings gear only */}
+      <Box direction="row" justify="flex-end" px="md">
         <Pressable
-          style={styles.homeCurrencyButton}
-          onPress={() => setActiveModal("home")}
-          accessibilityLabel={`Home currency: ${homeCurrency}. Tap to change.`}
+          style={styles.settingsButton}
+          onPress={() => setActiveModal("settings")}
+          accessibilityLabel="Settings"
+          hitSlop={12}
+        >
+          <Settings color={theme.colors.text} pointerEvents="none" />
+        </Pressable>
+      </Box>
+
+      {/* Result zone: converted amount + home currency info */}
+      <Box align="center" px="md" pt="xl">
+        <NumericDisplay
+          amount={convertedAmount}
+          homeCurrency={homeCurrency ?? "USD"}
+          travelCurrency={activeTravelCurrency}
+          rate={travelRate}
+          decimalSep={decimal}
+          thousandsSep={thousands}
+          onHomeCurrencyPress={() => setActiveModal("home")}
+        />
+      </Box>
+
+      {/* Swap button — centered in remaining space */}
+      <Box flex={1} align="center" justify="center">
+        <Pressable
+          style={styles.swapButton}
+          onPress={handleSwap}
+          accessibilityLabel="Swap currencies"
+          accessibilityRole="button"
+          hitSlop={8}
+        >
+          <ArrowUpDown size={20} color={theme.colors.text} />
+        </Pressable>
+      </Box>
+
+      {/* Input zone: travel currency input + selector */}
+      <Box align="center" px="md" pb="sm">
+        <Text
+          variant="codeLarge"
+          align="center"
+          numberOfLines={1}
+          adjustsFontSizeToFit
+          minimumFontScale={0.6}
+        >
+          {formatInputDisplay(input, decimal, thousands)}
+        </Text>
+
+        <Pressable
+          style={styles.travelInfoRow}
+          onPress={() => setActiveModal("travel")}
+          accessibilityLabel={`Travel currency: ${travelInfo?.name}, ${activeTravelCurrency}. Tap to change.`}
+          accessibilityRole="button"
         >
           <Text variant="caption" color="textSecondary">
-            {homeInfo?.flag} {homeCurrency}
+            {travelInfo?.flag} {travelInfo?.name} ({activeTravelCurrency}) · {travelInfo?.symbol}
           </Text>
           <Text variant="caption" color="textTertiary" style={{ fontSize: 11 }}>
             change
           </Text>
         </Pressable>
-
-        <Box flex={1} align="flex-end">
-          <Pressable
-            style={styles.settingsButton}
-            onPress={() => setActiveModal("settings")}
-            accessibilityLabel="Settings"
-            hitSlop={12}
-          >
-            <Settings color={theme.colors.text} pointerEvents="none" />
-          </Pressable>
-        </Box>
       </Box>
 
-      <Pressable
-        style={styles.travelCurrencyButton}
-        onPress={() => setActiveModal("travel")}
-        accessibilityLabel={`Travel currency: ${activeTravelCurrency}. Tap to change.`}
-      >
-        <Text style={{ fontSize: 44 }}>{travelInfo?.flag}</Text>
-        <Text variant="codeLarge" mt="xs">
-          {activeTravelCurrency}
-        </Text>
-        <Text variant="caption" color="textSecondary" mt="xs">
-          {travelInfo?.country}
-        </Text>
-      </Pressable>
-
-      <Box py="sm">
-        <Text variant="codeMedium" align="center">
-          {formatInputDisplay(input, decimal, thousands)} {activeTravelCurrency}
-        </Text>
-      </Box>
-
-      <NumericDisplay
-        amount={convertedAmount}
-        homeCurrency={homeCurrency ?? "USD"}
-        travelCurrency={activeTravelCurrency}
-        rate={travelRate}
-        isStale={isStale}
-        lastUpdated={lastUpdated}
-        decimalSep={decimal}
-        thousandsSep={thousands}
-      />
-
-      <Pressable
-        style={styles.refreshButton}
-        onPress={() => {
-          void refetch();
-        }}
-        accessibilityLabel="Refresh exchange rates"
-      >
-        <Text variant="caption" color="textTertiary">
-          {isLoading ? "Updating..." : "↻ Refresh rates"}
-        </Text>
-      </Pressable>
-
-      <Box
-        pt="sm"
-        style={{ marginTop: "auto", paddingBottom: rt.insets.bottom + theme.spacing.md }}
-      >
+      {/* NumPad */}
+      <Box style={{ paddingBottom: rt.insets.bottom + theme.spacing.md }}>
         <NumPad onPress={handleNumPadPress} decimalKey={decimal} />
       </Box>
 
@@ -185,23 +189,21 @@ export default function TravelScreen() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-  homeCurrencyButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: theme.spacing.sm,
-    paddingHorizontal: theme.spacing.md,
-    gap: theme.spacing.sm,
-  },
   settingsButton: {
     padding: theme.spacing.sm,
   },
-  travelCurrencyButton: {
-    alignItems: "center",
-    paddingVertical: theme.spacing.lg,
+  swapButton: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.full,
+    padding: theme.spacing.sm,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
-  refreshButton: {
-    alignSelf: "center",
-    paddingVertical: theme.spacing.xs,
+  travelInfoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: theme.spacing.sm,
+    paddingVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
   },
 }));

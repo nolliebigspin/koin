@@ -34,7 +34,7 @@ export function useRates(baseCurrency: string | undefined) {
     queryKey: ["rates", baseCurrency],
     queryFn: () => fetchRates(baseCurrency as string),
     enabled: !!baseCurrency,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 60 * 60 * 1000,
     gcTime: 24 * 60 * 60 * 1000,
     retry: 2,
     initialData: () => {
@@ -50,9 +50,5 @@ export function useRates(baseCurrency: string | undefined) {
   return {
     rates: query.data?.rates ?? null,
     isLoading: query.isFetching && !query.data,
-    isError: query.isError,
-    isStale: query.isStale || query.isError,
-    refetch: query.refetch,
-    lastUpdated: query.data?.lastUpdated ?? null,
   };
 }

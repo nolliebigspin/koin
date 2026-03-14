@@ -1,6 +1,6 @@
 import { type Currency, getCurrency } from "@koin/shared";
 import * as Haptics from "expo-haptics";
-import { ArrowUpDown, Settings } from "lucide-react-native";
+import { ArrowUpDown, RotateCcw, Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Platform, Pressable } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
@@ -130,8 +130,8 @@ export default function TravelScreen() {
           </Text>
         </Pressable>
 
-        {/* Swap button */}
-        <Box align="center" style={styles.swapContainer}>
+        {/* Swap + Reset buttons */}
+        <Box direction="row" align="center" justify="center" gap="md" style={styles.swapContainer}>
           <Pressable
             style={styles.swapButton}
             onPress={handleSwap}
@@ -140,6 +140,15 @@ export default function TravelScreen() {
             hitSlop={8}
           >
             <ArrowUpDown size={18} color={theme.colors.text} />
+          </Pressable>
+          <Pressable
+            style={styles.swapButton}
+            onPress={() => setInput("")}
+            accessibilityLabel="Reset input"
+            accessibilityRole="button"
+            hitSlop={8}
+          >
+            <RotateCcw size={18} color={theme.colors.text} />
           </Pressable>
         </Box>
 

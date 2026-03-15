@@ -7,7 +7,8 @@ import { StyleSheet } from "react-native-unistyles";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000,
+      staleTime: 60 * 60 * 1000,
+      gcTime: 24 * 60 * 60 * 1000,
       retry: 2,
     },
   },

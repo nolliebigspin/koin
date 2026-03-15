@@ -11,13 +11,25 @@ export const currencies: Currency[] = [
   { code: "AFN", name: "Afghan Afghani", flag: "🇦🇫", country: "Afghanistan", symbol: "؋" },
   { code: "ALL", name: "Albanian Lek", flag: "🇦🇱", country: "Albania", symbol: "L" },
   { code: "AMD", name: "Armenian Dram", flag: "🇦🇲", country: "Armenia", symbol: "֏" },
-  { code: "ANG", name: "Netherlands Antillean Guilder", flag: "🇨🇼", country: "Curaçao", symbol: "ƒ" },
+  {
+    code: "ANG",
+    name: "Netherlands Antillean Guilder",
+    flag: "🇨🇼",
+    country: "Curaçao",
+    symbol: "ƒ",
+  },
   { code: "AOA", name: "Angolan Kwanza", flag: "🇦🇴", country: "Angola", symbol: "Kz" },
   { code: "ARS", name: "Argentine Peso", flag: "🇦🇷", country: "Argentina", symbol: "$" },
   { code: "AUD", name: "Australian Dollar", flag: "🇦🇺", country: "Australia", symbol: "A$" },
   { code: "AWG", name: "Aruban Florin", flag: "🇦🇼", country: "Aruba", symbol: "ƒ" },
   { code: "AZN", name: "Azerbaijani Manat", flag: "🇦🇿", country: "Azerbaijan", symbol: "₼" },
-  { code: "BAM", name: "Bosnia-Herzegovina Mark", flag: "🇧🇦", country: "Bosnia and Herzegovina", symbol: "KM" },
+  {
+    code: "BAM",
+    name: "Bosnia-Herzegovina Mark",
+    flag: "🇧🇦",
+    country: "Bosnia and Herzegovina",
+    symbol: "KM",
+  },
   { code: "BBD", name: "Barbadian Dollar", flag: "🇧🇧", country: "Barbados", symbol: "Bds$" },
   { code: "BDT", name: "Bangladeshi Taka", flag: "🇧🇩", country: "Bangladesh", symbol: "৳" },
   { code: "BGN", name: "Bulgarian Lev", flag: "🇧🇬", country: "Bulgaria", symbol: "лв" },
@@ -51,7 +63,13 @@ export const currencies: Currency[] = [
   { code: "ETB", name: "Ethiopian Birr", flag: "🇪🇹", country: "Ethiopia", symbol: "Br" },
   { code: "EUR", name: "Euro", flag: "🇪🇺", country: "Eurozone", symbol: "€" },
   { code: "FJD", name: "Fijian Dollar", flag: "🇫🇯", country: "Fiji", symbol: "FJ$" },
-  { code: "FKP", name: "Falkland Islands Pound", flag: "🇫🇰", country: "Falkland Islands", symbol: "£" },
+  {
+    code: "FKP",
+    name: "Falkland Islands Pound",
+    flag: "🇫🇰",
+    country: "Falkland Islands",
+    symbol: "£",
+  },
   { code: "GBP", name: "British Pound", flag: "🇬🇧", country: "United Kingdom", symbol: "£" },
   { code: "GEL", name: "Georgian Lari", flag: "🇬🇪", country: "Georgia", symbol: "₾" },
   { code: "GHS", name: "Ghanaian Cedi", flag: "🇬🇭", country: "Ghana", symbol: "GH₵" },
@@ -80,7 +98,13 @@ export const currencies: Currency[] = [
   { code: "KMF", name: "Comorian Franc", flag: "🇰🇲", country: "Comoros", symbol: "CF" },
   { code: "KRW", name: "South Korean Won", flag: "🇰🇷", country: "South Korea", symbol: "₩" },
   { code: "KWD", name: "Kuwaiti Dinar", flag: "🇰🇼", country: "Kuwait", symbol: "KD" },
-  { code: "KYD", name: "Cayman Islands Dollar", flag: "🇰🇾", country: "Cayman Islands", symbol: "CI$" },
+  {
+    code: "KYD",
+    name: "Cayman Islands Dollar",
+    flag: "🇰🇾",
+    country: "Cayman Islands",
+    symbol: "CI$",
+  },
   { code: "KZT", name: "Kazakhstani Tenge", flag: "🇰🇿", country: "Kazakhstan", symbol: "₸" },
   { code: "LAK", name: "Lao Kip", flag: "🇱🇦", country: "Laos", symbol: "₭" },
   { code: "LBP", name: "Lebanese Pound", flag: "🇱🇧", country: "Lebanon", symbol: "L£" },
@@ -111,7 +135,13 @@ export const currencies: Currency[] = [
   { code: "OMR", name: "Omani Rial", flag: "🇴🇲", country: "Oman", symbol: "OMR" },
   { code: "PAB", name: "Panamanian Balboa", flag: "🇵🇦", country: "Panama", symbol: "B/" },
   { code: "PEN", name: "Peruvian Sol", flag: "🇵🇪", country: "Peru", symbol: "S/" },
-  { code: "PGK", name: "Papua New Guinean Kina", flag: "🇵🇬", country: "Papua New Guinea", symbol: "K" },
+  {
+    code: "PGK",
+    name: "Papua New Guinean Kina",
+    flag: "🇵🇬",
+    country: "Papua New Guinea",
+    symbol: "K",
+  },
   { code: "PHP", name: "Philippine Peso", flag: "🇵🇭", country: "Philippines", symbol: "₱" },
   { code: "PKR", name: "Pakistani Rupee", flag: "🇵🇰", country: "Pakistan", symbol: "₨" },
   { code: "PLN", name: "Polish Zloty", flag: "🇵🇱", country: "Poland", symbol: "zł" },
@@ -122,7 +152,13 @@ export const currencies: Currency[] = [
   { code: "RUB", name: "Russian Ruble", flag: "🇷🇺", country: "Russia", symbol: "₽" },
   { code: "RWF", name: "Rwandan Franc", flag: "🇷🇼", country: "Rwanda", symbol: "RF" },
   { code: "SAR", name: "Saudi Riyal", flag: "🇸🇦", country: "Saudi Arabia", symbol: "SR" },
-  { code: "SBD", name: "Solomon Islands Dollar", flag: "🇸🇧", country: "Solomon Islands", symbol: "SI$" },
+  {
+    code: "SBD",
+    name: "Solomon Islands Dollar",
+    flag: "🇸🇧",
+    country: "Solomon Islands",
+    symbol: "SI$",
+  },
   { code: "SCR", name: "Seychellois Rupee", flag: "🇸🇨", country: "Seychelles", symbol: "Rs" },
   { code: "SDG", name: "Sudanese Pound", flag: "🇸🇩", country: "Sudan", symbol: "£" },
   { code: "SEK", name: "Swedish Krona", flag: "🇸🇪", country: "Sweden", symbol: "kr" },
@@ -132,7 +168,13 @@ export const currencies: Currency[] = [
   { code: "SOS", name: "Somali Shilling", flag: "🇸🇴", country: "Somalia", symbol: "Sh" },
   { code: "SRD", name: "Surinamese Dollar", flag: "🇸🇷", country: "Suriname", symbol: "Sr$" },
   { code: "SSP", name: "South Sudanese Pound", flag: "🇸🇸", country: "South Sudan", symbol: "£" },
-  { code: "STN", name: "São Tomé and Príncipe Dobra", flag: "🇸🇹", country: "São Tomé and Príncipe", symbol: "Db" },
+  {
+    code: "STN",
+    name: "São Tomé and Príncipe Dobra",
+    flag: "🇸🇹",
+    country: "São Tomé and Príncipe",
+    symbol: "Db",
+  },
   { code: "SYP", name: "Syrian Pound", flag: "🇸🇾", country: "Syria", symbol: "£S" },
   { code: "SZL", name: "Eswatini Lilangeni", flag: "🇸🇿", country: "Eswatini", symbol: "E" },
   { code: "THB", name: "Thai Baht", flag: "🇹🇭", country: "Thailand", symbol: "฿" },
@@ -141,7 +183,13 @@ export const currencies: Currency[] = [
   { code: "TND", name: "Tunisian Dinar", flag: "🇹🇳", country: "Tunisia", symbol: "DT" },
   { code: "TOP", name: "Tongan Paʻanga", flag: "🇹🇴", country: "Tonga", symbol: "T$" },
   { code: "TRY", name: "Turkish Lira", flag: "🇹🇷", country: "Turkey", symbol: "₺" },
-  { code: "TTD", name: "Trinidad & Tobago Dollar", flag: "🇹🇹", country: "Trinidad and Tobago", symbol: "TT$" },
+  {
+    code: "TTD",
+    name: "Trinidad & Tobago Dollar",
+    flag: "🇹🇹",
+    country: "Trinidad and Tobago",
+    symbol: "TT$",
+  },
   { code: "TWD", name: "Taiwan Dollar", flag: "🇹🇼", country: "Taiwan", symbol: "NT$" },
   { code: "TZS", name: "Tanzanian Shilling", flag: "🇹🇿", country: "Tanzania", symbol: "TSh" },
   { code: "UAH", name: "Ukrainian Hryvnia", flag: "🇺🇦", country: "Ukraine", symbol: "₴" },
@@ -160,6 +208,8 @@ export const currencies: Currency[] = [
 
 export const CURRENCIES = currencies.map((c) => c.code);
 
+const currencyMap = new Map(currencies.map((c) => [c.code, c]));
+
 export function getCurrency(code: string): Currency | undefined {
-  return currencies.find((c) => c.code === code);
+  return currencyMap.get(code);
 }

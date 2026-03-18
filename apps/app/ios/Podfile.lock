@@ -240,6 +240,8 @@ PODS:
     - Yoga
   - ExpoSplashScreen (31.0.13):
     - ExpoModulesCore
+  - ExpoWebBrowser (55.0.10):
+    - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
     - ExpoModulesCore
   - FBLazyVector (0.81.5)
@@ -2295,6 +2297,7 @@ DEPENDENCIES:
   - "ExpoLinking (from `../../../node_modules/.bun/expo-linking@8.0.11+245a6c089f6d1b20/node_modules/expo-linking/ios`)"
   - "ExpoModulesCore (from `../../../node_modules/.bun/expo-modules-core@3.0.29+395f71ae3c4cac51/node_modules/expo-modules-core`)"
   - "ExpoSplashScreen (from `../../../node_modules/.bun/expo-splash-screen@31.0.13+4297496d9b6998e0/node_modules/expo-splash-screen/ios`)"
+  - "ExpoWebBrowser (from `../../../node_modules/.bun/expo-web-browser@55.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios`)"
   - "EXUpdatesInterface (from `../../../node_modules/.bun/expo-updates-interface@2.0.0+4297496d9b6998e0/node_modules/expo-updates-interface/ios`)"
   - "FBLazyVector (from `../../../node_modules/.bun/react-native@0.81.5+395f71ae3c4cac51/node_modules/react-native/Libraries/FBLazyVector`)"
   - "hermes-engine (from `../../../node_modules/.bun/react-native@0.81.5+395f71ae3c4cac51/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)"
@@ -2413,6 +2416,8 @@ EXTERNAL SOURCES:
     :path: "../../../node_modules/.bun/expo-modules-core@3.0.29+395f71ae3c4cac51/node_modules/expo-modules-core"
   ExpoSplashScreen:
     :path: "../../../node_modules/.bun/expo-splash-screen@31.0.13+4297496d9b6998e0/node_modules/expo-splash-screen/ios"
+  ExpoWebBrowser:
+    :path: "../../../node_modules/.bun/expo-web-browser@55.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios"
   EXUpdatesInterface:
     :path: "../../../node_modules/.bun/expo-updates-interface@2.0.0+4297496d9b6998e0/node_modules/expo-updates-interface/ios"
   FBLazyVector:
@@ -2587,6 +2592,7 @@ SPEC CHECKSUMS:
   ExpoLinking: 8f0aaf69aa56f832913030503b6263dc6f647f37
   ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
   ExpoSplashScreen: bc3cffefca2716e5f22350ca109badd7e50ec14d
+  ExpoWebBrowser: 04fdc3b0619d6708f931a9d0f8850903cc38d896
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172

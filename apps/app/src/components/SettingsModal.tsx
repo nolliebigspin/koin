@@ -1,3 +1,5 @@
+import * as WebBrowser from "expo-web-browser";
+import { ExternalLink } from "lucide-react-native";
 import { Modal, Pressable, View } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
@@ -76,6 +78,36 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
             </Pressable>
           );
         })}
+
+        <Box mt="xl">
+          <Text
+            variant="caption"
+            color="textSecondary"
+            mb="sm"
+            style={{ textTransform: "uppercase", letterSpacing: 1 }}
+          >
+            About
+          </Text>
+
+          <Box style={styles.aboutContainer}>
+            <Text variant="body" mb="sm">
+              Exchange rates provided by ExchangeRate-API.
+            </Text>
+            <Text variant="caption" color="textSecondary" mb="md">
+              Rates are for informational purposes only and may vary from actual market rates.
+            </Text>
+
+            <Pressable
+              style={styles.linkButton}
+              onPress={() => WebBrowser.openBrowserAsync("https://awinter.dev/other/koin/privacy")}
+            >
+              <Text variant="body" color="accent" style={{ fontWeight: "600" }}>
+                Privacy Policy
+              </Text>
+              <ExternalLink size={16} color={theme.colors.accent} />
+            </Pressable>
+          </Box>
+        </Box>
       </Box>
     </Modal>
   );
@@ -108,5 +140,18 @@ const styles = StyleSheet.create((theme) => ({
   },
   radioActive: {
     borderColor: theme.colors.accent,
+  },
+  aboutContainer: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.md,
+    padding: theme.spacing.md,
+  },
+  linkButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: theme.spacing.xs,
+    paddingTop: theme.spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
   },
 }));

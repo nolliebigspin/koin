@@ -139,7 +139,7 @@ export default function TravelScreen() {
             accessibilityRole="button"
             hitSlop={8}
           >
-            <ArrowUpDown size={18} color={theme.colors.text} />
+            <ArrowUpDown size={18} color={theme.colors.text} pointerEvents="none" />
           </Pressable>
           <Pressable
             style={styles.swapButton}
@@ -148,7 +148,7 @@ export default function TravelScreen() {
             accessibilityRole="button"
             hitSlop={8}
           >
-            <RotateCcw size={18} color={theme.colors.text} />
+            <RotateCcw size={18} color={theme.colors.text} pointerEvents="none" />
           </Pressable>
         </Box>
 

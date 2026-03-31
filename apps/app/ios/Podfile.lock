@@ -240,7 +240,7 @@ PODS:
     - Yoga
   - ExpoSplashScreen (31.0.13):
     - ExpoModulesCore
-  - ExpoWebBrowser (55.0.10):
+  - ExpoWebBrowser (15.0.10):
     - ExpoModulesCore
   - EXUpdatesInterface (2.0.0):
     - ExpoModulesCore
@@ -2280,7 +2280,7 @@ PODS:
   - Yoga (0.0.0)
 
 DEPENDENCIES:
-  - "EXConstants (from `../../../node_modules/.bun/expo-constants@18.0.13+e4fd16ac8ffee978/node_modules/expo-constants/ios`)"
+  - EXConstants (from `../../../node_modules/expo-constants/ios`)
   - "EXJSONUtils (from `../../../node_modules/.bun/expo-json-utils@0.15.0/node_modules/expo-json-utils/ios`)"
   - "EXManifests (from `../../../node_modules/.bun/expo-manifests@1.0.10+4297496d9b6998e0/node_modules/expo-manifests/ios`)"
   - "Expo (from `../../../node_modules/.bun/expo@54.0.33+4297496d9b6998e0/node_modules/expo`)"
@@ -2294,10 +2294,10 @@ DEPENDENCIES:
   - "ExpoHaptics (from `../../../node_modules/.bun/expo-haptics@15.0.8+4297496d9b6998e0/node_modules/expo-haptics/ios`)"
   - "ExpoHead (from `../../../node_modules/.bun/expo-router@6.0.23+3e052ab7e72f564c/node_modules/expo-router/ios`)"
   - "ExpoKeepAwake (from `../../../node_modules/.bun/expo-keep-awake@15.0.8+1b9f08083c0c1237/node_modules/expo-keep-awake/ios`)"
-  - "ExpoLinking (from `../../../node_modules/.bun/expo-linking@8.0.11+245a6c089f6d1b20/node_modules/expo-linking/ios`)"
+  - ExpoLinking (from `../../../node_modules/expo-linking/ios`)
   - "ExpoModulesCore (from `../../../node_modules/.bun/expo-modules-core@3.0.29+395f71ae3c4cac51/node_modules/expo-modules-core`)"
   - "ExpoSplashScreen (from `../../../node_modules/.bun/expo-splash-screen@31.0.13+4297496d9b6998e0/node_modules/expo-splash-screen/ios`)"
-  - "ExpoWebBrowser (from `../../../node_modules/.bun/expo-web-browser@55.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios`)"
+  - "ExpoWebBrowser (from `../../../node_modules/.bun/expo-web-browser@15.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios`)"
   - "EXUpdatesInterface (from `../../../node_modules/.bun/expo-updates-interface@2.0.0+4297496d9b6998e0/node_modules/expo-updates-interface/ios`)"
   - "FBLazyVector (from `../../../node_modules/.bun/react-native@0.81.5+395f71ae3c4cac51/node_modules/react-native/Libraries/FBLazyVector`)"
   - "hermes-engine (from `../../../node_modules/.bun/react-native@0.81.5+395f71ae3c4cac51/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)"
@@ -2372,7 +2372,7 @@ DEPENDENCIES:
   - "RNGestureHandler (from `../../../node_modules/.bun/react-native-gesture-handler@2.28.0+395f71ae3c4cac51/node_modules/react-native-gesture-handler`)"
   - "RNReanimated (from `../../../node_modules/.bun/react-native-reanimated@4.1.6+24660464e89e9245/node_modules/react-native-reanimated`)"
   - "RNScreens (from `../../../node_modules/.bun/react-native-screens@4.16.0+395f71ae3c4cac51/node_modules/react-native-screens`)"
-  - "RNSVG (from `../../../node_modules/.bun/react-native-svg@15.15.3+395f71ae3c4cac51/node_modules/react-native-svg`)"
+  - RNSVG (from `../../../node_modules/react-native-svg`)
   - "RNWorklets (from `../../../node_modules/.bun/react-native-worklets@0.5.1+395f71ae3c4cac51/node_modules/react-native-worklets`)"
   - "Unistyles (from `../../../node_modules/.bun/react-native-unistyles@3.0.24+40e9fdbf3e4de802/node_modules/react-native-unistyles`)"
   - "Yoga (from `../../../node_modules/.bun/react-native@0.81.5+395f71ae3c4cac51/node_modules/react-native/ReactCommon/yoga`)"
@@ -2383,7 +2383,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   EXConstants:
-    :path: "../../../node_modules/.bun/expo-constants@18.0.13+e4fd16ac8ffee978/node_modules/expo-constants/ios"
+    :path: "../../../node_modules/expo-constants/ios"
   EXJSONUtils:
     :path: "../../../node_modules/.bun/expo-json-utils@0.15.0/node_modules/expo-json-utils/ios"
   EXManifests:
@@ -2411,13 +2411,13 @@ EXTERNAL SOURCES:
   ExpoKeepAwake:
     :path: "../../../node_modules/.bun/expo-keep-awake@15.0.8+1b9f08083c0c1237/node_modules/expo-keep-awake/ios"
   ExpoLinking:
-    :path: "../../../node_modules/.bun/expo-linking@8.0.11+245a6c089f6d1b20/node_modules/expo-linking/ios"
+    :path: "../../../node_modules/expo-linking/ios"
   ExpoModulesCore:
     :path: "../../../node_modules/.bun/expo-modules-core@3.0.29+395f71ae3c4cac51/node_modules/expo-modules-core"
   ExpoSplashScreen:
     :path: "../../../node_modules/.bun/expo-splash-screen@31.0.13+4297496d9b6998e0/node_modules/expo-splash-screen/ios"
   ExpoWebBrowser:
-    :path: "../../../node_modules/.bun/expo-web-browser@55.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios"
+    :path: "../../../node_modules/.bun/expo-web-browser@15.0.10+4297496d9b6998e0/node_modules/expo-web-browser/ios"
   EXUpdatesInterface:
     :path: "../../../node_modules/.bun/expo-updates-interface@2.0.0+4297496d9b6998e0/node_modules/expo-updates-interface/ios"
   FBLazyVector:
@@ -2566,7 +2566,7 @@ EXTERNAL SOURCES:
   RNScreens:
     :path: "../../../node_modules/.bun/react-native-screens@4.16.0+395f71ae3c4cac51/node_modules/react-native-screens"
   RNSVG:
-    :path: "../../../node_modules/.bun/react-native-svg@15.15.3+395f71ae3c4cac51/node_modules/react-native-svg"
+    :path: "../../../node_modules/react-native-svg"
   RNWorklets:
     :path: "../../../node_modules/.bun/react-native-worklets@0.5.1+395f71ae3c4cac51/node_modules/react-native-worklets"
   Unistyles:
@@ -2592,7 +2592,7 @@ SPEC CHECKSUMS:
   ExpoLinking: 8f0aaf69aa56f832913030503b6263dc6f647f37
   ExpoModulesCore: f3da4f1ab5a8375d0beafab763739dbee8446583
   ExpoSplashScreen: bc3cffefca2716e5f22350ca109badd7e50ec14d
-  ExpoWebBrowser: 04fdc3b0619d6708f931a9d0f8850903cc38d896
+  ExpoWebBrowser: 17b064c621789e41d4816c95c93f429b84971f52
   EXUpdatesInterface: 5adf50cb41e079c861da6d9b4b954c3db9a50734
   FBLazyVector: e95a291ad2dadb88e42b06e0c5fb8262de53ec12
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172

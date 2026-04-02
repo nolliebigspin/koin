@@ -1,7 +1,14 @@
 import { type Currency, getCurrency } from "@koin/shared";
-import { ArrowUpDown, RotateCcw, Settings } from "lucide-react-native";
+import { RotateCcw, Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Pressable } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
+import { Path, Svg } from "react-native-svg";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { NumPad } from "@/src/components/NumPad";
@@ -26,6 +33,32 @@ function formatAmount(amount: number, decimalSep: string, thousandsSep: string):
   return `${formatted}${decimalSep}${decPart}`;
 }
 
+const STROKE_PROPS = {
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  fill: "none",
+};
+
+function ArrowUpHalf({ size, color }: { size: number; color: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" color={color}>
+      <Path d="m3 8 4-4 4 4" {...STROKE_PROPS} />
+      <Path d="M7 4v16" {...STROKE_PROPS} />
+    </Svg>
+  );
+}
+
+function ArrowDownHalf({ size, color }: { size: number; color: string }) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 24 24" color={color}>
+      <Path d="m21 16-4 4-4-4" {...STROKE_PROPS} />
+      <Path d="M17 20V4" {...STROKE_PROPS} />
+    </Svg>
+  );
+}
+
 export default function TravelScreen() {
   const { theme, rt } = useUnistyles();
   const { homeCurrency, setHomeCurrency } = useHomeCurrency();
@@ -37,6 +70,22 @@ export default function TravelScreen() {
 
   const [input, setInput] = useState("");
   const [activeModal, setActiveModal] = useState<"home" | "travel" | "settings" | null>(null);
+
+  const ICON_SIZE = 18;
+  const TRAVEL = ICON_SIZE * 1.5;
+
+  const swapOffset = useSharedValue(0);
+  const arrowUpStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: -swapOffset.value }],
+  }));
+  const arrowDownStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: swapOffset.value }],
+  }));
+
+  const resetRotation = useSharedValue(0);
+  const resetAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${resetRotation.value}deg` }],
+  }));
 
   const handleNumPadPress = useCallback((key: string) => {
     setInput((prev) => {
@@ -93,13 +142,19 @@ export default function TravelScreen() {
     setHomeCurrency(oldTravel);
     setTravelCurrency(oldHome ?? "USD");
     setInput("");
+    swapOffset.value = withSequence(
+      withTiming(TRAVEL, { duration: 150 }),
+      withTiming(-TRAVEL, { duration: 0 }),
+      withTiming(0, { duration: 150 })
+    );
     haptics.medium();
-  }, [homeCurrency, activeTravelCurrency, setHomeCurrency, setTravelCurrency]);
+  }, [homeCurrency, activeTravelCurrency, setHomeCurrency, setTravelCurrency, swapOffset, TRAVEL]);
 
   const handleReset = useCallback(() => {
     setInput("");
+    resetRotation.value = withTiming(resetRotation.value - 360, { duration: 400 });
     haptics.warning();
-  }, []);
+  }, [resetRotation]);
 
   const displayResult =
     convertedAmount !== null ? formatAmount(convertedAmount, decimal, thousands) : `0${decimal}00`;
@@ -136,13 +191,18 @@ export default function TravelScreen() {
         {/* Swap + Reset buttons */}
         <Box direction="row" align="center" justify="center" gap="md" style={styles.swapContainer}>
           <Pressable
-            style={styles.swapButton}
+            style={[styles.swapButton, styles.swapButtonClip]}
             onPress={handleSwap}
             accessibilityLabel="Swap currencies"
             accessibilityRole="button"
             hitSlop={8}
           >
-            <ArrowUpDown size={18} color={theme.colors.text} pointerEvents="none" />
+            <Animated.View style={[styles.swapHalf, arrowUpStyle]}>
+              <ArrowUpHalf size={ICON_SIZE} color={theme.colors.text} />
+            </Animated.View>
+            <Animated.View style={[styles.swapHalf, styles.swapHalfOverlay, arrowDownStyle]}>
+              <ArrowDownHalf size={ICON_SIZE} color={theme.colors.text} />
+            </Animated.View>
           </Pressable>
           <Pressable
             style={styles.swapButton}
@@ -151,7 +211,9 @@ export default function TravelScreen() {
             accessibilityRole="button"
             hitSlop={8}
           >
-            <RotateCcw size={18} color={theme.colors.text} pointerEvents="none" />
+            <Animated.View style={resetAnimatedStyle}>
+              <RotateCcw size={ICON_SIZE} color={theme.colors.text} pointerEvents="none" />
+            </Animated.View>
           </Pressable>
         </Box>
 
@@ -235,5 +297,19 @@ const styles = StyleSheet.create((theme) => ({
     padding: theme.spacing.sm,
     borderWidth: 1,
     borderColor: theme.colors.border,
+  },
+  swapButtonClip: {
+    overflow: "hidden",
+  },
+  swapHalf: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  swapHalfOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 }));

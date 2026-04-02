@@ -1,8 +1,8 @@
-import * as Haptics from "expo-haptics";
 import { useCallback, useMemo } from "react";
-import { Platform, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
+import * as haptics from "@/src/lib/haptics";
 
 type NumPadProps = {
   onPress: (key: string) => void;
@@ -22,10 +22,10 @@ export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
 
   const handlePress = useCallback(
     (key: string) => {
-      if (Platform.OS === "ios") {
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      }
-      // Normalise decimal separator to '.' for parseFloat
+      if (key === "⌫") haptics.medium();
+      else if (key === "," || key === ".") haptics.rigid();
+      else haptics.tap();
+
       onPress(key === "," ? "." : key);
     },
     [onPress]

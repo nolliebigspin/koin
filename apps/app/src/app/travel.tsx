@@ -1,8 +1,7 @@
 import { type Currency, getCurrency } from "@koin/shared";
-import * as Haptics from "expo-haptics";
 import { ArrowUpDown, RotateCcw, Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
-import { Platform, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
 import { NumPad } from "@/src/components/NumPad";
@@ -12,6 +11,7 @@ import { useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
 import { useRates } from "@/src/hooks/useRates";
 import { useTravelCurrency } from "@/src/hooks/useTravelCurrency";
+import * as haptics from "@/src/lib/haptics";
 
 function formatInputDisplay(raw: string, decimalSep: string, thousandsSep: string): string {
   if (!raw) return "0";
@@ -93,10 +93,13 @@ export default function TravelScreen() {
     setHomeCurrency(oldTravel);
     setTravelCurrency(oldHome ?? "USD");
     setInput("");
-    if (Platform.OS === "ios") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
+    haptics.medium();
   }, [homeCurrency, activeTravelCurrency, setHomeCurrency, setTravelCurrency]);
+
+  const handleReset = useCallback(() => {
+    setInput("");
+    haptics.warning();
+  }, []);
 
   const displayResult =
     convertedAmount !== null ? formatAmount(convertedAmount, decimal, thousands) : `0${decimal}00`;
@@ -143,7 +146,7 @@ export default function TravelScreen() {
           </Pressable>
           <Pressable
             style={styles.swapButton}
-            onPress={() => setInput("")}
+            onPress={handleReset}
             accessibilityLabel="Reset input"
             accessibilityRole="button"
             hitSlop={8}

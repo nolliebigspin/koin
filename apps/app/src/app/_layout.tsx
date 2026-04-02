@@ -23,7 +23,16 @@ export default function RootLayout() {
           contentStyle: styles.content,
           animation: "fade",
         }}
-      />
+      >
+        <Stack.Screen
+          name="travel"
+          options={{
+            animation: "slide_from_right",
+            animationDuration: 250,
+            gestureEnabled: false,
+          }}
+        />
+      </Stack>
       <StatusBar style="light" />
     </QueryClientProvider>
   );

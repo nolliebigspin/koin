@@ -1,9 +1,11 @@
 import * as WebBrowser from "expo-web-browser";
-import { ExternalLink } from "lucide-react-native";
-import { Modal, Pressable, View } from "react-native";
+import { ExternalLink, Trash2 } from "lucide-react-native";
+import { Alert, Modal, Pressable, View } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
 import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
+import * as haptics from "@/src/lib/haptics";
+import { storage } from "@/src/lib/storage";
 
 type SettingsModalProps = {
   visible: boolean;
@@ -108,6 +110,43 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
             </Pressable>
           </Box>
         </Box>
+
+        {__DEV__ && (
+          <Box mt="xl">
+            <Text
+              variant="caption"
+              color="textSecondary"
+              mb="sm"
+              style={{ textTransform: "uppercase", letterSpacing: 1 }}
+            >
+              Developer
+            </Text>
+
+            <Pressable
+              style={styles.dangerButton}
+              onPress={() => {
+                Alert.alert("Clear all data?", "This will reset the app to its initial state.", [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Clear",
+                    style: "destructive",
+                    onPress: () => {
+                      storage.clearAll();
+                      haptics.warning();
+                    },
+                  },
+                ]);
+              }}
+              accessibilityRole="button"
+              accessibilityLabel="Clear all stored data"
+            >
+              <Trash2 size={18} color={theme.colors.error} />
+              <Text variant="body" color="error" style={{ fontWeight: "600" }}>
+                Clear MMKV Storage
+              </Text>
+            </Pressable>
+          </Box>
+        )}
       </Box>
     </Modal>
   );
@@ -153,5 +192,15 @@ const styles = StyleSheet.create((theme) => ({
     paddingTop: theme.spacing.sm,
     borderTopWidth: 1,
     borderTopColor: theme.colors.border,
+  },
+  dangerButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.md,
+    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    minHeight: 56,
   },
 }));

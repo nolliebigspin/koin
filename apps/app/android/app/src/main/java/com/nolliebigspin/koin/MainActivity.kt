@@ -1,4 +1,4 @@
-package com.nolliebigspin.travelrate
+package com.nolliebigspin.koin
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "koin",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nolliebigspin.koin"
@@ -15,7 +14,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#08233E"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.nolliebigspin.koin"
     },

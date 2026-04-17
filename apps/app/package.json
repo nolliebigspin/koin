@@ -8,7 +8,6 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "ios:device:tunnel": "bunx expo start --dev-client --host tunnel",
-    "build:release": "expo run:ios --device --configuration Release",
     "check:ts": "tsc --noEmit"
   },
   "dependencies": {

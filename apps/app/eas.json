@@ -12,14 +12,19 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "ios": {},
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   },
   "submit": {
     "production": {
       "ios": {
         "ascAppId": "6761405420"
-      }
+      },
+      "android": {}
     }
   }
 }

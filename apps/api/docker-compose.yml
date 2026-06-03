@@ -12,5 +12,6 @@ services:
       - "4001:4001"
     environment:
       - REDIS_URL=redis://redis:6379
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
     depends_on:
       - redis

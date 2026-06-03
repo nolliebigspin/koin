@@ -1,5 +1,6 @@
 import type { CachedRates, RatesResponse } from "@koin/shared";
 import { CURRENCIES, UPDATE_INTERVAL_MS } from "./config";
+import { notifyDiscord } from "./discord";
 import redis from "./redis";
 
 const BATCH_SIZE = 5;
@@ -47,9 +48,9 @@ export async function updateAllRates(): Promise<void> {
 
   if (failed.length > 0) {
     const errorDetails = failed.map((f) => `${f.base} (${f.error})`).join(", ");
-    console.error(
-      `⚠️  Failed to update all currencies. Success: ${results.length - failed.length}/${results.length}. Errors: ${errorDetails}`
-    );
+    const message = `⚠️  Failed to update all currencies. Success: ${results.length - failed.length}/${results.length}. Errors: ${errorDetails}`;
+    console.error(message);
+    await notifyDiscord(message);
   } else {
     console.log(`✅  Successfully updated all ${results.length} currencies.`);
   }

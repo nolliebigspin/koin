@@ -10,4 +10,5 @@ export const StorageKeys = {
   CACHED_RATES: "cached-rates",
   DECIMAL_SEPARATOR: "decimal-separator",
   FAVORITE_CURRENCIES: "favorite-currencies",
+  SWAP_BEHAVIOR: "swap-behavior",
 } as const;

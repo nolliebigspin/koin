@@ -16,6 +16,7 @@ import { SettingsModal } from "@/src/components/SettingsModal";
 import { Box, Text } from "@/src/components/ui";
 import { useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
 import { useHomeCurrency } from "@/src/hooks/useHomeCurrency";
+import { useKeepValueOnSwap } from "@/src/hooks/useKeepValueOnSwap";
 import { useRates } from "@/src/hooks/useRates";
 import { useTravelCurrency } from "@/src/hooks/useTravelCurrency";
 import * as haptics from "@/src/lib/haptics";
@@ -64,6 +65,7 @@ export default function TravelScreen() {
   const { homeCurrency, setHomeCurrency } = useHomeCurrency();
   const { travelCurrency, setTravelCurrency } = useTravelCurrency();
   const { decimal, thousands } = useDecimalSeparator();
+  const { keepValue } = useKeepValueOnSwap();
   const { rates } = useRates(homeCurrency);
 
   const activeTravelCurrency = travelCurrency ?? "EUR";
@@ -141,14 +143,28 @@ export default function TravelScreen() {
     const oldTravel = activeTravelCurrency;
     setHomeCurrency(oldTravel);
     setTravelCurrency(oldHome ?? "USD");
-    setInput("");
+    // Carry the converted value over so the direction flips without losing the amount.
+    if (keepValue && convertedAmount !== null) {
+      setInput(convertedAmount.toFixed(2));
+    } else if (!keepValue) {
+      setInput("");
+    }
     swapOffset.value = withSequence(
       withTiming(TRAVEL, { duration: 150 }),
       withTiming(-TRAVEL, { duration: 0 }),
       withTiming(0, { duration: 150 })
     );
     haptics.medium();
-  }, [homeCurrency, activeTravelCurrency, setHomeCurrency, setTravelCurrency, swapOffset, TRAVEL]);
+  }, [
+    homeCurrency,
+    activeTravelCurrency,
+    convertedAmount,
+    keepValue,
+    setHomeCurrency,
+    setTravelCurrency,
+    swapOffset,
+    TRAVEL,
+  ]);
 
   const handleReset = useCallback(() => {
     setInput("");

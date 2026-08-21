@@ -4,6 +4,7 @@ import { Alert, Modal, Pressable, View } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
 import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
+import { type SwapBehavior, useKeepValueOnSwap } from "@/src/hooks/useKeepValueOnSwap";
 import * as haptics from "@/src/lib/haptics";
 import { storage } from "@/src/lib/storage";
 
@@ -15,10 +16,16 @@ type SettingsModalProps = {
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
   const { theme } = useUnistyles();
   const { decimal, setDecimal } = useDecimalSeparator();
+  const { behavior, setBehavior } = useKeepValueOnSwap();
 
   const options: { value: DecimalSeparator; label: string; example: string }[] = [
     { value: ",", label: "Comma (,)", example: "1.000,50" },
     { value: ".", label: "Period (.)", example: "1,000.50" },
+  ];
+
+  const swapOptions: { value: SwapBehavior; label: string; example: string }[] = [
+    { value: "keep", label: "Keep value", example: "Converted amount carries over" },
+    { value: "reset", label: "Reset to zero", example: "Input clears on swap" },
   ];
 
   return (
@@ -80,6 +87,43 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
             </Pressable>
           );
         })}
+
+        <Box mt="xl">
+          <Text
+            variant="caption"
+            color="textSecondary"
+            mb="sm"
+            style={{ textTransform: "uppercase", letterSpacing: 1 }}
+          >
+            When swapping currencies
+          </Text>
+
+          {swapOptions.map((opt) => {
+            const isActive = behavior === opt.value;
+            return (
+              <Pressable
+                key={opt.value}
+                style={[styles.option, isActive && styles.optionActive]}
+                onPress={() => setBehavior(opt.value)}
+                accessibilityRole="radio"
+                accessibilityState={{ selected: isActive }}
+                accessibilityLabel={`${opt.label}. ${opt.example}`}
+              >
+                <Box flex={1}>
+                  <Text variant="body" style={{ fontWeight: "600" }}>
+                    {opt.label}
+                  </Text>
+                  <Text variant="caption" color="textSecondary" mt="xxs">
+                    {opt.example}
+                  </Text>
+                </Box>
+                <View style={[styles.radio, isActive && styles.radioActive]}>
+                  {isActive && <Box width={12} height={12} radius="full" bg="accent" />}
+                </View>
+              </Pressable>
+            );
+          })}
+        </Box>
 
         <Box mt="xl">
           <Text

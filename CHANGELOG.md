@@ -19,6 +19,20 @@
 • New setting: choose whether swapping keeps or resets the amount.
 ```
 
+### Google Play "What's new" (max. 500 characters)
+
+```
+<en-US>
+• Swap keeps your amount – swapping back and forth always gives the same numbers
+• Swapping works offline
+• Rates refresh automatically every day
+• No ",00" for currencies without cents (JPY, KRW, VND, …)
+• Changing a currency keeps your amount, long-press ⌫ to clear
+• Better layout on tablets, with large text and on small screens
+• Fixed settings and currency picker overlapping the status bar
+</en-US>
+```
+
 ### Changes
 
 **App**

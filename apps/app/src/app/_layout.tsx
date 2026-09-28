@@ -1,6 +1,7 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { focusManager, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { AppState } from "react-native";
 import "react-native-reanimated";
 import { StyleSheet } from "react-native-unistyles";
 
@@ -12,6 +13,14 @@ const queryClient = new QueryClient({
       retry: 2,
     },
   },
+});
+
+// Re-check stale queries (e.g. a new day of rates) when the app returns from background.
+focusManager.setEventListener((handleFocus) => {
+  const subscription = AppState.addEventListener("change", (state) => {
+    handleFocus(state === "active");
+  });
+  return () => subscription.remove();
 });
 
 export default function RootLayout() {

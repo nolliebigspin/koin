@@ -218,3 +218,27 @@ const currencyMap = new Map(currencies.map((c) => [c.code, c]));
 export function getCurrency(code: string): Currency | undefined {
   return currencyMap.get(code);
 }
+
+/** Currencies that are used without minor units (ISO 4217 plus common practice, e.g. IDR). */
+const ZERO_DECIMAL_CURRENCIES = new Set([
+  "BIF",
+  "CLP",
+  "COP",
+  "DJF",
+  "GNF",
+  "HUF",
+  "IDR",
+  "ISK",
+  "JPY",
+  "KMF",
+  "KRW",
+  "PYG",
+  "RWF",
+  "UGX",
+  "VND",
+  "VUV",
+]);
+
+export function getCurrencyDecimals(code: string): 0 | 2 {
+  return ZERO_DECIMAL_CURRENCIES.has(code) ? 0 : 2;
+}

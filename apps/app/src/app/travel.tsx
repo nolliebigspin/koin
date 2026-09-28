@@ -1,5 +1,5 @@
-import { type Currency, getCurrency } from "@koin/shared";
-import { RotateCcw, Settings } from "lucide-react-native";
+import { type Currency, getCurrency, getCurrencyDecimals } from "@koin/shared";
+import { ChevronDown, RotateCcw, Settings } from "lucide-react-native";
 import { useCallback, useMemo, useState } from "react";
 import { Pressable } from "react-native";
 import Animated, {
@@ -28,10 +28,37 @@ function formatInputDisplay(raw: string, decimalSep: string, thousandsSep: strin
   return decPart !== undefined ? `${formatted}${decimalSep}${decPart}` : formatted;
 }
 
-function formatAmount(amount: number, decimalSep: string, thousandsSep: string): string {
-  const [intPart, decPart] = amount.toFixed(2).split(".");
+function formatAmount(
+  amount: number,
+  decimals: number,
+  decimalSep: string,
+  thousandsSep: string
+): string {
+  const [intPart, decPart] = amount.toFixed(decimals).split(".");
   const formatted = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, thousandsSep);
-  return `${formatted}${decimalSep}${decPart}`;
+  return decPart !== undefined ? `${formatted}${decimalSep}${decPart}` : formatted;
+}
+
+/** Applies a numpad key to the raw input, e.g. ("12", "3") → "123". */
+function applyKey(prev: string, key: string, maxDecimals: number): string {
+  if (key === "⌫") {
+    return prev.slice(0, -1);
+  }
+  if (key === ".") {
+    if (maxDecimals === 0 || prev.includes(".")) return prev;
+    if (prev === "") return "0.";
+  }
+  if (prev.length >= 12) return prev;
+  const decimalIndex = prev.indexOf(".");
+  if (decimalIndex !== -1 && prev.length - decimalIndex > maxDecimals) return prev;
+  if (prev === "0" && key !== ".") return key;
+  return prev + key;
+}
+
+/** Converts an amount into raw input form, e.g. 108.2 → "108.2" (no trailing zeros). */
+function toInputValue(amount: number, decimals: number): string {
+  const value = String(Number(amount.toFixed(decimals)));
+  return value === "0" ? "" : value;
 }
 
 const STROKE_PROPS = {
@@ -69,8 +96,14 @@ export default function TravelScreen() {
   const { rates } = useRates(homeCurrency);
 
   const activeTravelCurrency = travelCurrency ?? "EUR";
+  const activeHomeCurrency = homeCurrency ?? "USD";
+  const travelDecimals = getCurrencyDecimals(activeTravelCurrency);
+  const homeDecimals = getCurrencyDecimals(activeHomeCurrency);
 
   const [input, setInput] = useState("");
+  // Exact amount carried over by a swap. Kept unrounded so swapping back and forth never drifts;
+  // the next key replaces it (backspace edits its rounded form).
+  const [carried, setCarried] = useState<number | null>(null);
   const [activeModal, setActiveModal] = useState<"home" | "travel" | "settings" | null>(null);
 
   const ICON_SIZE = 18;
@@ -89,21 +122,19 @@ export default function TravelScreen() {
     transform: [{ rotate: `${resetRotation.value}deg` }],
   }));
 
-  const handleNumPadPress = useCallback((key: string) => {
-    setInput((prev) => {
-      if (key === "⌫") {
-        return prev.slice(0, -1);
+  const handleNumPadPress = useCallback(
+    (key: string) => {
+      if (key === "." && travelDecimals === 0) return;
+      if (carried !== null) {
+        const prev = key === "⌫" ? toInputValue(carried, travelDecimals) : "";
+        setCarried(null);
+        setInput(applyKey(prev, key, travelDecimals));
+        return;
       }
-      if (key === ".") {
-        if (prev.includes(".")) return prev;
-        if (prev === "") return "0.";
-      }
-      if (prev.length >= 12) return prev;
-      const decimalIndex = prev.indexOf(".");
-      if (decimalIndex !== -1 && prev.length - decimalIndex > 2) return prev;
-      return prev + key;
-    });
-  }, []);
+      setInput((prev) => applyKey(prev, key, travelDecimals));
+    },
+    [carried, travelDecimals]
+  );
 
   const travelRate = useMemo(() => {
     if (!rates) return null;
@@ -111,44 +142,21 @@ export default function TravelScreen() {
   }, [rates, activeTravelCurrency]);
 
   const convertedAmount = useMemo(() => {
-    if (!travelRate || !input) return null;
-    const foreignAmount = parseFloat(input);
+    if (!travelRate) return null;
+    const foreignAmount = carried ?? parseFloat(input);
     if (Number.isNaN(foreignAmount) || foreignAmount === 0) return null;
     return foreignAmount / travelRate;
-  }, [travelRate, input]);
+  }, [travelRate, input, carried]);
 
   const travelInfo = useMemo(() => getCurrency(activeTravelCurrency), [activeTravelCurrency]);
-  const homeInfo = useMemo(() => getCurrency(homeCurrency ?? "USD"), [homeCurrency]);
-
-  const handleSelectHome = useCallback(
-    (currency: Currency) => {
-      setHomeCurrency(currency.code);
-      setActiveModal(null);
-      setInput("");
-    },
-    [setHomeCurrency]
-  );
-
-  const handleSelectTravel = useCallback(
-    (currency: Currency) => {
-      setTravelCurrency(currency.code);
-      setActiveModal(null);
-      setInput("");
-    },
-    [setTravelCurrency]
-  );
+  const homeInfo = useMemo(() => getCurrency(activeHomeCurrency), [activeHomeCurrency]);
 
   const handleSwap = useCallback(() => {
-    const oldHome = homeCurrency;
-    const oldTravel = activeTravelCurrency;
-    setHomeCurrency(oldTravel);
-    setTravelCurrency(oldHome ?? "USD");
+    setHomeCurrency(activeTravelCurrency);
+    setTravelCurrency(activeHomeCurrency);
     // Carry the converted value over so the direction flips without losing the amount.
-    if (keepValue && convertedAmount !== null) {
-      setInput(convertedAmount.toFixed(2));
-    } else if (!keepValue) {
-      setInput("");
-    }
+    setInput("");
+    setCarried(keepValue ? convertedAmount : null);
     swapOffset.value = withSequence(
       withTiming(TRAVEL, { duration: 150 }),
       withTiming(-TRAVEL, { duration: 0 }),
@@ -156,7 +164,7 @@ export default function TravelScreen() {
     );
     haptics.medium();
   }, [
-    homeCurrency,
+    activeHomeCurrency,
     activeTravelCurrency,
     convertedAmount,
     keepValue,
@@ -166,17 +174,60 @@ export default function TravelScreen() {
     TRAVEL,
   ]);
 
+  const handleSelectHome = useCallback(
+    (currency: Currency) => {
+      setActiveModal(null);
+      if (currency.code === activeTravelCurrency) {
+        handleSwap();
+        return;
+      }
+      setHomeCurrency(currency.code);
+    },
+    [activeTravelCurrency, handleSwap, setHomeCurrency]
+  );
+
+  const handleSelectTravel = useCallback(
+    (currency: Currency) => {
+      setActiveModal(null);
+      if (currency.code === activeHomeCurrency) {
+        handleSwap();
+        return;
+      }
+      setTravelCurrency(currency.code);
+      // Keep the typed amount, but drop decimals the new currency doesn't use.
+      if (getCurrencyDecimals(currency.code) === 0) {
+        setInput((prev) => prev.split(".")[0]);
+      }
+    },
+    [activeHomeCurrency, handleSwap, setTravelCurrency]
+  );
+
   const handleReset = useCallback(() => {
     setInput("");
+    setCarried(null);
     resetRotation.value = withTiming(resetRotation.value - 360, { duration: 400 });
     haptics.warning();
   }, [resetRotation]);
 
-  const displayResult =
-    convertedAmount !== null ? formatAmount(convertedAmount, decimal, thousands) : `0${decimal}00`;
+  const displayResult = formatAmount(convertedAmount ?? 0, homeDecimals, decimal, thousands);
+
+  // Scale weak currencies so the rate stays readable, e.g. "1.000 JPY = 6,70 USD".
+  const rateLine = useMemo(() => {
+    if (!travelRate) return null;
+    const rate = 1 / travelRate;
+    let scale = 1;
+    while (rate * scale < 1 && scale < 1_000_000) scale *= 10;
+    const travelAmount = formatAmount(scale, 0, decimal, thousands);
+    const homeAmount = formatAmount(rate * scale, homeDecimals, decimal, thousands);
+    return `${travelAmount} ${activeTravelCurrency} = ${homeAmount} ${activeHomeCurrency}`;
+  }, [travelRate, homeDecimals, decimal, thousands, activeTravelCurrency, activeHomeCurrency]);
 
   return (
-    <Box flex={1} bg="background" style={{ paddingTop: rt.insets.top + theme.spacing.md }}>
+    <Box
+      flex={1}
+      bg="background"
+      style={[styles.screen, { paddingTop: rt.insets.top + theme.spacing.md }]}
+    >
       {/* Top bar: settings gear only */}
       <Box direction="row" justify="flex-end" px="md">
         <Pressable
@@ -194,14 +245,26 @@ export default function TravelScreen() {
         {/* Input card (travel currency) */}
         <Pressable style={styles.card} onPress={() => setActiveModal("travel")}>
           <Box flex={1} justify="center">
-            <Text variant="codeLarge" numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.5}>
-              {travelInfo?.symbol} {formatInputDisplay(input, decimal, thousands)}
+            <Text
+              variant="codeLarge"
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.5}
+              maxFontSizeMultiplier={1.2}
+            >
+              {travelInfo?.symbol}{" "}
+              {carried !== null
+                ? formatAmount(carried, travelDecimals, decimal, thousands)
+                : formatInputDisplay(input, decimal, thousands)}
             </Text>
           </Box>
           <Text style={styles.flag}>{travelInfo?.flag}</Text>
-          <Text variant="body" color="textSecondary">
-            {activeTravelCurrency}
-          </Text>
+          <Box direction="row" align="center" gap="xxs">
+            <Text variant="body" color="textSecondary">
+              {activeTravelCurrency}
+            </Text>
+            <ChevronDown size={16} color={theme.colors.textSecondary} pointerEvents="none" />
+          </Box>
         </Pressable>
 
         {/* Swap + Reset buttons */}
@@ -242,20 +305,24 @@ export default function TravelScreen() {
               numberOfLines={1}
               adjustsFontSizeToFit
               minimumFontScale={0.5}
+              maxFontSizeMultiplier={1.2}
             >
               {homeInfo?.symbol} {displayResult}
             </Text>
           </Box>
           <Text style={styles.flag}>{homeInfo?.flag}</Text>
-          <Text variant="body" color="textSecondary">
-            {homeCurrency ?? "USD"}
-          </Text>
+          <Box direction="row" align="center" gap="xxs">
+            <Text variant="body" color="textSecondary">
+              {activeHomeCurrency}
+            </Text>
+            <ChevronDown size={16} color={theme.colors.textSecondary} pointerEvents="none" />
+          </Box>
         </Pressable>
 
         {/* Rate info */}
-        {travelRate !== null && (
+        {rateLine !== null && (
           <Text variant="caption" color="textTertiary" align="center" mt="sm">
-            1 {activeTravelCurrency} = {(1 / travelRate).toFixed(4)} {homeCurrency ?? "USD"}
+            {rateLine}
           </Text>
         )}
       </Box>
@@ -265,7 +332,7 @@ export default function TravelScreen() {
 
       {/* NumPad */}
       <Box style={{ paddingBottom: rt.insets.bottom + theme.spacing.md }}>
-        <NumPad onPress={handleNumPadPress} decimalKey={decimal} />
+        <NumPad onPress={handleNumPadPress} decimalKey={decimal} onClear={handleReset} />
       </Box>
 
       <CurrencyPickerModal
@@ -286,6 +353,12 @@ export default function TravelScreen() {
 }
 
 const styles = StyleSheet.create((theme) => ({
+  // Keeps the layout phone-sized and centered on tablets.
+  screen: {
+    width: "100%",
+    maxWidth: 480,
+    alignSelf: "center",
+  },
   settingsButton: {
     padding: theme.spacing.sm,
   },

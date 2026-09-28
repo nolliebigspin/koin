@@ -7,9 +7,11 @@ import * as haptics from "@/src/lib/haptics";
 type NumPadProps = {
   onPress: (key: string) => void;
   decimalKey?: "," | ".";
+  /** Called when backspace is long-pressed. */
+  onClear?: () => void;
 };
 
-export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
+export function NumPad({ onPress, decimalKey = ",", onClear }: NumPadProps) {
   const keys = useMemo(
     () => [
       ["1", "2", "3"],
@@ -40,12 +42,17 @@ export function NumPad({ onPress, decimalKey = "," }: NumPadProps) {
               key={key}
               style={({ pressed }) => [styles.key, pressed && styles.keyPressed]}
               onPress={() => handlePress(key)}
+              onLongPress={key === "⌫" ? onClear : undefined}
               accessibilityRole="button"
               accessibilityLabel={
                 key === "⌫" ? "Backspace" : key === "," || key === "." ? "Decimal point" : key
               }
             >
-              <Text variant="numpad" style={key === "⌫" ? { fontSize: 24 } : undefined}>
+              <Text
+                variant="numpad"
+                style={key === "⌫" ? { fontSize: 24 } : undefined}
+                maxFontSizeMultiplier={1.2}
+              >
                 {key}
               </Text>
             </Pressable>

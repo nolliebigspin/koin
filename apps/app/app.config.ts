@@ -12,6 +12,10 @@ const config: ExpoConfig = {
   ios: {
     supportsTablet: true,
     bundleIdentifier: "com.nolliebigspin.koin",
+    config: {
+      // Only standard HTTPS — skips the export compliance question for every build.
+      usesNonExemptEncryption: false,
+    },
   },
   android: {
     adaptiveIcon: {

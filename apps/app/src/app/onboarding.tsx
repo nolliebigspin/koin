@@ -1,6 +1,7 @@
 import type { Currency } from "@koin/shared";
 import { router } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { BackHandler } from "react-native";
 import Animated, { SlideInRight, SlideOutLeft } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
 import { CurrencyPickerModal } from "@/src/components/CurrencyPickerModal";
@@ -22,6 +23,16 @@ export default function OnboardingScreen() {
   const { setHomeCurrency } = useHomeCurrency();
   const { setTravelCurrency } = useTravelCurrency();
   const [step, setStep] = useState<"home" | "travel">("home");
+
+  // Android back on the second step returns to the first instead of leaving the app.
+  useEffect(() => {
+    if (step !== "travel") return;
+    const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+      setStep("home");
+      return true;
+    });
+    return () => subscription.remove();
+  }, [step]);
 
   const handleSelectHome = useCallback(
     (currency: Currency) => {

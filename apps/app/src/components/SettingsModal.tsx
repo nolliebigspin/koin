@@ -1,6 +1,6 @@
 import * as WebBrowser from "expo-web-browser";
 import { ExternalLink, Trash2 } from "lucide-react-native";
-import { Alert, Modal, Pressable, View } from "react-native";
+import { Alert, Modal, Platform, Pressable, ScrollView, View } from "react-native";
 import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import { Box, Text } from "@/src/components/ui";
 import { type DecimalSeparator, useDecimalSeparator } from "@/src/hooks/useDecimalSeparator";
@@ -14,7 +14,7 @@ type SettingsModalProps = {
 };
 
 export function SettingsModal({ visible, onClose }: SettingsModalProps) {
-  const { theme } = useUnistyles();
+  const { theme, rt } = useUnistyles();
   const { decimal, setDecimal } = useDecimalSeparator();
   const { behavior, setBehavior } = useKeepValueOnSwap();
 
@@ -35,7 +35,16 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
       presentationStyle="formSheet"
       onRequestClose={onClose}
     >
-      <Box flex={1} bg="background" p="lg">
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[
+          styles.content,
+          Platform.OS === "android" && {
+            paddingTop: rt.insets.top + theme.spacing.lg,
+            paddingBottom: rt.insets.bottom + theme.spacing.lg,
+          },
+        ]}
+      >
         <Box direction="row" justify="space-between" align="center" pb="xl">
           <Text variant="heading">Settings</Text>
           <Pressable
@@ -191,12 +200,19 @@ export function SettingsModal({ visible, onClose }: SettingsModalProps) {
             </Pressable>
           </Box>
         )}
-      </Box>
+      </ScrollView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create((theme) => ({
+  scroll: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
+  content: {
+    padding: theme.spacing.lg,
+  },
   option: {
     flexDirection: "row",
     alignItems: "center",

@@ -31,7 +31,7 @@ export function CurrencyPickerModal({
   selected,
   mode = "modal",
 }: CurrencyPickerModalProps) {
-  const { theme } = useUnistyles();
+  const { theme, rt } = useUnistyles();
   const [search, setSearch] = useState("");
   const { favorites, setFavorites } = useFavoriteCurrencies();
 
@@ -161,13 +161,22 @@ export function CurrencyPickerModal({
 
   const keyExtractor = useCallback((item: Currency, index: number) => `${index}-${item.code}`, []);
 
+  // Android modals are fullscreen (formSheet is iOS-only), so they need the safe-area insets.
+  const isAndroidModal = mode === "modal" && Platform.OS === "android";
+
   const content = (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       {mode === "modal" && (
-        <Box direction="row" justify="flex-end" p="lg" px="md">
+        <Box
+          direction="row"
+          justify="flex-end"
+          p="lg"
+          px="md"
+          style={isAndroidModal && { paddingTop: rt.insets.top + theme.spacing.lg }}
+        >
           <Pressable
             onPress={onClose}
             hitSlop={12}
@@ -197,7 +206,10 @@ export function CurrencyPickerModal({
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
         keyExtractor={keyExtractor}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[
+          styles.list,
+          isAndroidModal && { paddingBottom: rt.insets.bottom + theme.spacing.xxl },
+        ]}
         keyboardShouldPersistTaps="handled"
         initialNumToRender={20}
         stickySectionHeadersEnabled={false}
